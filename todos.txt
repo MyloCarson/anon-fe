@@ -1,0 +1,2 @@
+1: Add Drafts, say a user is adding reviews and he looses network or stuff. I need a way to store that. for retrials
+2: add twitter bot, that retweets the posted reviews on our timeline 

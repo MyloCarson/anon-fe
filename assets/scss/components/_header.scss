@@ -1,0 +1,95 @@
+@import "../utils/settings";
+//styles that belongs to header
+
+.header{
+    
+    height: 48px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    &-wrapper{
+        background-color: $darkgray;
+        width: 100%;
+    }
+
+    &-title{
+        color: $lavender;
+        font-size: $font-size-5;
+    }
+    
+
+    .nav{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        &-item{
+            margin: 0px 4px;
+            &:first-child{
+                margin-left: 0;
+            }
+            &:last-child{
+                margin-right: 0;
+            }
+        }
+        &-search{
+            height: 18px;
+            width: 18px;
+            fill: $primary;
+            transition: fill ease-in-out 0.3s;
+            cursor: pointer;
+            ;
+            &:hover{
+                fill: $lavender;
+            }
+
+            &-input{
+                // opacity: 0;
+                // display: none;
+                height: 32px;
+                border-radius: 60px ;
+                &::placeholder{
+                    font-size: $font-size-2 !important;
+                }
+                // &.active{
+                //     animation: slide-in 2s ease-in-out 0s 1 forwards;
+                // }
+                // &.inactive{
+                //     animation: slide-out 2s ease-in-out 0s 1 forwards;
+                // }
+            }
+            
+        }
+    }
+}
+
+@keyframes slide-in{
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+        display: none;
+    }
+
+    95% {
+        opacity: 0.5;
+        display: block;
+    }
+    100%{
+        transform: translateX(0%);;
+    }
+}
+
+@keyframes slide-out{
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    5% {
+        opacity: 0.5;
+        display: none;
+    }
+    0%{
+        transform: translateX(0%);;
+    }
+}

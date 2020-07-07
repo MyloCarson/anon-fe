@@ -1,0 +1,108 @@
+// this contains variables for colors, height, border-radius, mixins, font-sizes, etc
+// example
+
+$white: #fff;
+$rock-blue: #9cb3c9;
+$secondary: #0e2439;
+$accent: #274562;
+$primary: #9cb3c9;
+$cornflowerBlue: #4699eb;
+$alt: #0e2337;
+$darkgray: #1f364d;
+$lavender: #e4e7e9;
+$body: #9cb3c9;
+$black: #000;
+
+
+//font-size
+$base-font-size: 16px;
+
+@function font-size ($font-size) {
+    @return ($font-size/$base-font-size)*1rem;
+}
+
+
+//Font-sizes
+$font-size-xs: font-size(8px);
+$font-size-0: font-size(10px);
+$font-size-1: font-size(12px);
+$font-size-2: font-size(14px);
+$font-size-3: font-size(16px);
+$font-size-4: font-size(18px);
+$font-size-5: font-size(24px);
+$font-size-6: font-size(26px);
+$font-size-7: font-size(23px);
+$font-size-8: font-size(30px);
+$font-size-9: font-size(40px);
+$font-size-10: font-size(54px);
+$font-size-md: font-size(36px);
+$font-size-small: font-size(20px);
+$font-size-smaller: font-size(22px);
+$font-size-largest: font-size(48px);
+$font-size-semi: font-size(84px);
+$font-size-medium: font-size(80px);
+$font-size-large: font-size(90px);
+$font-size-maximum: font-size(130px);
+
+
+
+//z-index
+$z-index-1: 1;
+$z-index-2: 3;
+$z-index-3: 10;
+$z-index-4: 50;
+
+//radius
+
+$border-radius-1: 2px;
+$border-radius-2: 4px;
+$border-radius-3: 8px;
+
+//breakpoints
+$mobile-width: 576px;
+$tablet-width: 768px;
+$desktop-width: 1440px;
+
+@mixin smaller-screen {
+    @media (max-width: 375px) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media (min-width: #{$desktop-width}) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: #{$mobile-width}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media(min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1 }) {
+        @content;
+    }
+}
+
+@mixin mobileAndTablet {
+    @include mobile {
+        @content;
+    }
+
+    @include tablet {
+        @content;
+    }
+}
+
+@mixin tabletAndDesktop {
+    @include tablet() {
+        @content;
+    }
+
+    @include desktop() {
+        @content;
+    }
+}

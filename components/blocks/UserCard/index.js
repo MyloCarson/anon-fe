@@ -1,0 +1,23 @@
+import React from 'react'
+import { Card } from 'components/blocks'
+import { toggleTokenRevealModal } from '../../../actions'
+import { useDispatch } from 'react-redux'
+
+const UserCard = () => {
+  const dispatch = useDispatch()
+  const toggleModal = (value) => dispatch(toggleTokenRevealModal(value))
+  return (
+    <Card>
+      <div className="">
+        <div className="w-full px-3 py-2 border-b-2 border-gray-700 mb-2 flex flex-row justify-between items-center">
+          <h6 className="text-lg text-white">Hi Anon,</h6>
+        </div>
+        <div className="flex flex-row px-3 py-4">
+          <div className="button button--primary" onClick={() => { toggleModal(true) }}> Reveal Token </div>
+        </div>
+      </div>
+    </Card>
+  )
+}
+
+export default UserCard

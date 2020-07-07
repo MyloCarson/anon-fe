@@ -1,0 +1,17 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+
+const KeyIcon = ({ width = 512, height = 512, fill = 'black' }) => (
+  <svg width={width} height={height} viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M512 176.001C512 273.203 433.202 352 336 352C324.78 352 313.81 350.938 303.173 348.931L279.161 375.945C276.909 378.478 274.147 380.506 271.055 381.894C267.963 383.282 264.612 384 261.223 384H224V424C224 437.255 213.255 448 200 448H160V488C160 501.255 149.255 512 136 512H24C10.745 512 0 501.255 0 488V409.941C0 403.576 2.529 397.471 7.029 392.97L168.831 231.168C163.108 213.814 160 195.271 160 176C160 78.798 238.797 0.00100001 335.999 9.55257e-09C433.488 -0.000999991 512 78.511 512 176.001ZM336 128C336 154.51 357.49 176 384 176C410.51 176 432 154.51 432 128C432 101.49 410.51 80 384 80C357.49 80 336 101.49 336 128Z" fill={fill}/>
+  </svg>
+
+)
+
+KeyIcon.propTypes = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  fill: PropTypes.string
+}
+
+export default KeyIcon

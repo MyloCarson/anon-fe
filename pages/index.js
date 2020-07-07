@@ -1,209 +1,77 @@
-import Head from 'next/head'
+import React from 'react'
+import App from './_app'
+import { Card, ReviewItem, MainCardHeader, UserCard, CompanyPill } from 'components/blocks'
+import DefaultLayout from 'components/layout/DefaultLayout'
+import { getKey } from 'utils'
+import { KeyIcon } from 'components/vectors'
+import { toggleCreateReviewModal, toggleCreateAccountModal, toggleTokenRevealModal } from '../actions'
+import { useDispatch } from 'react-redux'
 
-export default function Home() {
+export function Home () {
+  const dispatch = useDispatch()
+  const openReviewModal = (value) => dispatch(toggleCreateReviewModal(value))
+  const openAccountModal = value => dispatch(toggleCreateAccountModal(value))
+  const toggleModal = (value) => dispatch(toggleTokenRevealModal(value))
+
   return (
-    <div className="container">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <DefaultLayout>
+      <main className="w-screen pt-5 pb-16 px-4 xl:px-0">
+        <div className="sm:max-w-full mx-auto md:max-w-screen-lg">
+          <div className="grid grid-cols-1 md:grid-cols-3 md:gap-4">
+            <div className="col-span-2">
+              <div className="flex flex-row md:hidden mb-3">
+                <div className="button button--primary flex-grow" onClick={() => { openAccountModal(true) }}>REVIEW COMPANY</div>
+                <div className="button button--primary ml-3">
+                  <div onClick={() => { toggleModal(true) }}>
+                    <KeyIcon width={18} height={18} fill={'#fff'} />
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-row flex-wrap mb-3 md:hidden">
+                {
+                  ['Konga', 'Jumia', 'MTN Nigeria', 'CarryFirst', 'Paystack', 'HNG'].map(name => <CompanyPill key={getKey()} name={name} />)
+                }
+              </div>
+              <Card>
+                <MainCardHeader />
+                <div className="w-full mt-2">
+                  {
+                    [1, 22, 13, 894, 5, 64, 7, 8, 239].map(num => (<ReviewItem key={getKey()} comments={num} />))
+                  }
+                </div>
+              </Card>
+            </div>
+            <div className="hidden md:flex flex-col col-span-1">
+              <div className="mb-4">
+                <UserCard/>
+              </div>
+              <Card>
+                <div className="">
+                  <div className="w-full px-3 py-2 border-b-2 border-gray-700 mb-2 flex flex-row justify-between items-center">
+                    <h6 className="text-lg text-white">Popular Companies</h6>
+                  </div>
+                  {/* <ul className="px-3 py-3">
+                    {
+                      ['Konga', 'Jumia', 'MTN Nigeria', 'CarryFirst', 'Paystack', 'HNG'].map(name => <PopularCompany key={getKey()} name={name} />)
+                    }
+                  </ul> */}
 
-      <main>
-        <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+                  <div className="flex flex-row flex-wrap mb-3 px-2">
+                    {
+                      ['Konga', 'Jumia', 'MTN Nigeria', 'CarryFirst', 'Paystack', 'HNG'].map(name => <CompanyPill key={getKey()} name={name} />)
+                    }
+                  </div>
 
-        <p className="description">
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
-        <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="card"
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="card"
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+                </div>
+              </Card>
+            </div>
+          </div>
         </div>
       </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer img {
-          margin-left: 0.5rem;
-        }
-
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
-        }
-
-        .title a:hover,
-        .title a:focus,
-        .title a:active {
-          text-decoration: underline;
-        }
-
-        .title {
-          margin: 0;
-          line-height: 1.15;
-          font-size: 4rem;
-        }
-
-        .title,
-        .description {
-          text-align: center;
-        }
-
-        .description {
-          line-height: 1.5;
-          font-size: 1.5rem;
-        }
-
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-
-          max-width: 800px;
-          margin-top: 3rem;
-        }
-
-        .card {
-          margin: 1rem;
-          flex-basis: 45%;
-          padding: 1.5rem;
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
-          transition: color 0.15s ease, border-color 0.15s ease;
-        }
-
-        .card:hover,
-        .card:focus,
-        .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
-        }
-
-        .card h3 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-        }
-
-        .card p {
-          margin: 0;
-          font-size: 1.25rem;
-          line-height: 1.5;
-        }
-
-        .logo {
-          height: 1em;
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
-          }
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
+    </DefaultLayout>
   )
+}
+
+export default function DefaultApp (props) {
+  return <App Component={Home} pageProps={props} />
 }

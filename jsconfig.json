@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "blocks/*": ["./components/blocks/*"],
+            "shared/*": ["./components/shared/*"],
+            "vectors/*": ["./components/vectors/*"],
+            "@scss/*": ["./assets/scss/*"],
+            "@utils/*": ["./assets/scss/utils/*"],
+            "@constants": ["./constants/index.js"]
+        }
+    },
+}

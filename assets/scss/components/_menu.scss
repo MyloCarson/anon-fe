@@ -1,0 +1,15 @@
+@import "../utils/settings";
+//styles that belongs to menu
+
+.menu{
+    position: absolute;
+    top: 48px;
+    opacity: 0;
+    transition: all ease-in-out 0.4s;
+    pointer-events: none;
+
+    &.active{
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
