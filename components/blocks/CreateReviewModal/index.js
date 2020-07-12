@@ -1,7 +1,7 @@
 import React, { useState, memo } from 'react'
-import { ReviewsTextArea, Modal, Button } from 'components/blocks'
-import { getKey } from 'utils'
-import { toggleCreateReviewModal } from '../../../actions'
+import { ReviewsTextArea, Modal, Progress } from 'components/blocks'
+import { getKey, getIdForNameInArray, toastConfig } from 'utils'
+import { toggleCreateReviewModal } from '@actions'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { PrivacyIcon, InfoIcon } from 'components/vectors'
@@ -12,11 +12,18 @@ import Slide from 'react-reveal/Slide'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import * as _ from 'lodash'
+import APIClient from '../../../utils/APIClient'
+
+import { toast } from 'react-toastify'
 
 const CreateReviewModal = () => {
   const showCreateReviewModal = useSelector((state) => state.showCreateReviewModal)
+  const sectors = useSelector((state) => state.sectors)
+  const companies = useSelector((state) => state.companies)
   const [reviews, reviewsSet] = useState([''])
   const [reviewHasError, reviewHasErrorSet] = useState(false)
+  const notifySuccess = () => toast.success('🥳 Review don cast!!!', toastConfig)
+  const notifyError = (message) => toast.error(`😟😟, ${message}`, toastConfig)
 
   // const nReview = useSelector((state) => state.newReview);
 
@@ -40,17 +47,11 @@ const CreateReviewModal = () => {
 
   const reviewSchema = Yup.object().shape({
     company: Yup.string()
-      .required('Required'),
+      .required('Ohh, you forgot!'),
     sector: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'),
-    reviews: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'),
+      .required('Ohh, you forgot!'),
     company_email: Yup.string()
-      .email('Invalid')
+      .email('Bad email address')
   })
 
   return (
@@ -67,11 +68,30 @@ const CreateReviewModal = () => {
               sector: ''
             }}
             validationSchema={reviewSchema}
-            onSubmit={values => {
-              // same shape as initial values
-              console.log(values)
-              closeModal(false)
-              dispatch(toggleCreateReviewModal(true))
+            onSubmit={(values, { setSubmitting }) => {
+              const payload = {
+                sector: getIdForNameInArray(sectors, values.sector),
+                company: getIdForNameInArray(companies, values.company),
+                review: reviews,
+                company_email: values.company_email
+              }
+              APIClient.post('reviews', payload)
+                .then(response => {
+                  setSubmitting(false)
+                  if (response.data.statusCode === 201) {
+                    notifySuccess()
+                    closeModal(false)
+                    dispatch(toggleCreateReviewModal(false))
+                  }
+                })
+                .catch(error => {
+                  setSubmitting(false)
+                  if (error.response.data.statusCode === 400) {
+                    notifyError('Unable to cast review')
+                  } else {
+                    notifyError('Kindly reach out to admin')
+                  }
+                })
             }}
           >
             {({
@@ -84,7 +104,13 @@ const CreateReviewModal = () => {
               isSubmitting
             }) => (
 
-              <form onSubmit={e => e.preventDefault()}>
+              <form onSubmit={e => {
+                e.preventDefault()
+                // handleSubmit(e)
+                const hasError = testReviews()
+                reviewHasErrorSet(hasError)
+                if (!hasError) handleSubmit(e)
+              }}>
                 <Slide top>
                   <div className="flex flex-col mb-2">
                     <label htmlFor="company" className="text-white mb-2">Select Company</label>
@@ -92,18 +118,14 @@ const CreateReviewModal = () => {
                       <input list="companies" name="company" id="company" className={`w-auto p-2 rounded ${(_.has(touched, 'company') && _.has(errors, 'company')) && 'form--error'}`} value={values.company} onChange={handleChange} />
                     </HeadShake>
                     <datalist id="companies">
-                      <option value="Add New Company"></option>
-                      <option value="konga"/>
-                      <option value="KPMG"/>
-                      <option value="Jumia"/>
-                      <option value="Uber"/>
+                      { companies && companies.map((company) => <option key={getKey()} value={company.name}/>)}
                     </datalist>
                     <Fade bottom collapse when={(_.has(touched, 'company')) && (_.has(errors, 'company'))}>
                       <span className="text-xs text-yellow-400">Oh, you forgot your company?</span>
                     </Fade>
                   </div>
                 </Slide>
-                {
+                {/* {
                   // if the company input has been touched and its empty show this
                   _.eq(values.company, 'Add New Company') && _.has(touched, 'company') && (
                     <Slide top>
@@ -113,7 +135,7 @@ const CreateReviewModal = () => {
                       </div>
                     </Slide>
                   )
-                }
+                } */}
 
                 <Slide top>
                   <div className="flex flex-col mt-2">
@@ -122,10 +144,9 @@ const CreateReviewModal = () => {
                       <input list="sectors" name="sector" id="sector" className={`w-auto p-2 rounded ${_.has(touched, 'sector') && _.has(errors, 'sector') && 'form--error'}`} value={values.sector} onChange={handleChange} />
                     </HeadShake>
                     <datalist id="sectors">
-                      <option value="Engineering"/>
-                      <option value="Health Care"/>
-                      <option value="Government"/>
-                      <option value="Others"/>
+                      {
+                        sectors && sectors.map((sector) => (<option key={getKey()} value={sector.name}/>))
+                      }
                     </datalist>
                   </div>
                   <Fade bottom collapse when={(_.has(touched, 'sector')) && (_.has(errors, 'sector'))}>
@@ -165,15 +186,12 @@ const CreateReviewModal = () => {
                     </div>
                   </Slide>
                 </div>
-                <Slide right>
-                  <div className="flex flex-row justify-between items-center mt-4">
-                    <button className="button button--primary" type="button" onClick={ () => {
-                      const hasError = testReviews()
-                      console.log(hasError)
-                      hasError ? reviewHasErrorSet(hasError) : handleSubmit()
-                    }}>Cast it</button>
-                  </div>
-                </Slide>
+                { isSubmitting ? (<Progress />)
+                  : (<Slide right>
+                    <div className="flex flex-row justify-between items-center mt-4">
+                      <button className="button button--primary" disabled={isSubmitting} type="submit">Cast it</button>
+                    </div>
+                  </Slide>)}
               </form>
 
             )}

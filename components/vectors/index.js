@@ -9,5 +9,6 @@ import VerifiedIcon from './VerifiedIcon'
 import InfoIcon from './InfoIcon'
 import JobIcon from './JobIcon'
 import KeyIcon from './KeyIcon'
+import UserIcon from './UserIcon'
 
-export { SearchIcon, DownChevron, CloseIcon, CommentIcon, MoreCommentIcon, PrivacyIcon, VerifiedIcon, InfoIcon, JobIcon, KeyIcon }
+export { SearchIcon, DownChevron, CloseIcon, CommentIcon, MoreCommentIcon, PrivacyIcon, VerifiedIcon, InfoIcon, JobIcon, KeyIcon, UserIcon }

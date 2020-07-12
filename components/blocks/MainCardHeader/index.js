@@ -1,16 +1,10 @@
 import React, { useState } from 'react'
 import { DownChevron } from 'components/vectors'
 import PropTypes from 'prop-types'
-
-import { toggleCreateReviewModal, toggleCreateAccountModal } from '../../../actions'
-import { useDispatch } from 'react-redux'
+import { ReviewButton } from 'components/blocks'
 
 const MainCardHeader = () => {
   const [showMenu, showMenuSet] = useState(false)
-
-  const dispatch = useDispatch()
-  const openReviewModal = (value) => dispatch(toggleCreateReviewModal(value))
-  const openAccountModal = value => dispatch(toggleCreateAccountModal(value))
 
   const handleMenuToggle = () => {
     showMenuSet(!showMenu)
@@ -40,7 +34,7 @@ const MainCardHeader = () => {
         <p className="text-orange-600 ml-5">Trending</p>
       </div>
       <div className="hidden md:block">
-        <div className="button button--primary" onClick={() => { openAccountModal(true) }}>REVIEW COMPANY</div>
+        <ReviewButton />
       </div>
     </div>
   )

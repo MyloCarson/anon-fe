@@ -29,9 +29,11 @@ export default function DefaultLayout (props) {
         <meta name="theme-color" content="#ffffff"></meta> */}
       </Head>
       <Header />
-      {
-        props.children
-      }
+      <div className="" style={{minHeight: '85vh'}}>
+        {
+          props.children
+        }
+      </div>
       <CreateAccountModal />
       <CreateReviewModal />
       <TokenRevealModal />

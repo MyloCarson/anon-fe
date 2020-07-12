@@ -14,6 +14,11 @@ import CompanyPill from './CompanyPill'
 import UserCard from './UserCard'
 import TokenRevealModal from './TokenRevealModal'
 import ReviewsTextArea from './ReviewsTextArea'
+import Progress from './Progress'
+import ReviewButton from './ReviewButton'
+import ErrorBoundary from './ErrorBoundary'
+import Comments from './Comments'
+import MainReviews from './MainReviews'
 
 export {
   Card,
@@ -31,5 +36,10 @@ export {
   CompanyPill,
   UserCard,
   TokenRevealModal,
-  ReviewsTextArea
+  ReviewsTextArea,
+  Progress,
+  ReviewButton,
+  ErrorBoundary,
+  Comments,
+  MainReviews,
 }

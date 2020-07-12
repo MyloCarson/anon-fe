@@ -6,7 +6,14 @@ const initialState = {
   newReview: [''],
   showCreateAccountModal: false,
   showCreateReviewModal: false,
-  showTokenRevealModal: false
+  showTokenRevealModal: false,
+  user: {},
+  reviews: [],
+  sectors: [],
+  companies: [],
+  newComment: undefined,
+  loadingReviews: false,
+  loggedIn: false
 }
 
 const store = createStore(rootReducer, initialState)
