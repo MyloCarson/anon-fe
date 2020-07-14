@@ -11,7 +11,7 @@ const Comments = ({ reviewId }) => {
   useEffect(() => {
     const socket = socketIOClient(process.env.NEXT_PUBLIC_SOCKET_ENDPOINT)
     socket.on('new-comment', response => {
-      if (response.data._id === reviewId) { // if the reviews are the same
+      if (response.data.review === reviewId) { // if the reviews are the same
         commentsSet([response.data].concat(comments))
       }
     })

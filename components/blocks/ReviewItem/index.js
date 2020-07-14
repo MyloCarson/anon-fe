@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import Slide from 'react-reveal/Slide'
 import moment from 'moment'
 import APIClient from 'utils/APIClient'
+import { removeUrl } from 'utils'
 
 const ReviewItem = ({ review }) => {
   const isGreater = num => num < 99
@@ -44,7 +45,7 @@ const ReviewItem = ({ review }) => {
         <div className="flex flex-col w-full ml-4">
           <Link href={`/reviews/${review._id}`}>
             <a className="text-gray-100 mb-1 hover:font-semibold cursor-pointer visited:text-red-600">
-              {review.review && review.review[0]}
+              {review.review && removeUrl(review.review[0])}
             </a>
           </Link>
           <div className="flex flex-row items-center justify-between mt-2">

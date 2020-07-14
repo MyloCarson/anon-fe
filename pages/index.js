@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import App from './_app'
 import { Card, MainReviews, MainCardHeader, UserCard, CompanyPill, ReviewButton, ErrorBoundary, Progress, Button } from 'components/blocks'
 import DefaultLayout from 'components/layout/DefaultLayout'
 import { getKey, getUser } from 'utils'
-import { UserIcon } from 'components/vectors'
+import { UserIcon, SignInIcon, SignOutIcon } from 'components/vectors'
 import { toggleTokenRevealModal, addSectors, addCompanies, addReviews } from '@actions'
 import { useDispatch, useSelector } from 'react-redux'
 import APIClient from '../utils/APIClient'
 import PropTypes from 'prop-types'
+import socketIOClient from 'socket.io-client'
 
 export function Home ({ reviews, sectors, companies }) {
   const dispatch = useDispatch()
@@ -36,6 +37,15 @@ export function Home ({ reviews, sectors, companies }) {
         reviewsSet([..._reviews].concat(response.data.data.reviews))
       })
   }
+  useEffect(() => {
+    const socket = socketIOClient(process.env.NEXT_PUBLIC_SOCKET_ENDPOINT)
+    socket.on('new-review', response => {
+      reviewsSet([response].concat(_reviews))
+    })
+
+    // CLEAN UP THE EFFECT
+    return () => socket.disconnect()
+  }, [])
 
   return (
     <DefaultLayout>
@@ -47,11 +57,18 @@ export function Home ({ reviews, sectors, companies }) {
                 <div className="flex-grow">
                   <ReviewButton />
                 </div>
-                { (getUser() || loggedIn) && (
+                
+                { (getUser() || loggedIn) ? (
                   <div className="button button--primary ml-3">
                     <div onClick={() => { toggleModal(true) }}>
                       <UserIcon width={18} height={18} fill={'#fff'} />
                     </div>
+                  </div>
+                ) : (
+                  <div className="button button--primary  ml-4">
+                      <div>
+                        <SignInIcon width={24} height={24} fill="#fff"/>
+                      </div>
                   </div>
                 )}
               </div>

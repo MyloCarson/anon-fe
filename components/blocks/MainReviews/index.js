@@ -5,6 +5,7 @@ import APIClient from 'utils/APIClient'
 import PropTypes from 'prop-types'
 import * as _ from 'lodash'
 const MainReviews = ({ reviews }) => {
+  // console.log(reviews)
   // useEffect(() => {
   //   console.log(_reviews)
   // }, [_reviews])
@@ -67,12 +68,12 @@ MainReviews.propTypes = {
     PropTypes.shape(
       {
         _id: PropTypes.string.isRequired,
-        review: PropTypes.arrayOf(PropTypes.string.isRequired),
+        review: PropTypes.arrayOf(PropTypes.string).isRequired,
         verifiedByUser: PropTypes.bool.isRequired,
         verifiedByAdmin: PropTypes.bool.isRequired,
-        company: {
+        company: PropTypes.shape({
           name: PropTypes.string.isRequired
-        },
+        }),
         user: {
           verified: PropTypes.bool.isRequired,
           name: PropTypes.string.isRequired,
@@ -83,7 +84,7 @@ MainReviews.propTypes = {
         __v: PropTypes.number
       }
     ).isRequired
-  ).isRequired
+  )
 }
 
 export default MainReviews

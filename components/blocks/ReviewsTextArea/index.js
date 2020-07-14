@@ -1,4 +1,4 @@
-import React, { useState, memo } from 'react'
+import React, { useState } from 'react'
 import { TextArea, Button } from 'components/blocks'
 import Slide from 'react-reveal/Slide'
 import HeadShake from 'react-reveal/HeadShake'
@@ -55,4 +55,4 @@ ReviewsTextArea.propTypes = {
   takeValues: PropTypes.func.isRequired
 }
 
-export default memo(ReviewsTextArea)
+export default (ReviewsTextArea)

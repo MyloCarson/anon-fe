@@ -25,6 +25,7 @@ const CreateReviewModal = () => {
   const notifySuccess = () => toast.success('🥳 Review don cast!!!', toastConfig)
   const notifyError = (message) => toast.error(`😟😟, ${message}`, toastConfig)
 
+  console.log('rendered')
   // const nReview = useSelector((state) => state.newReview);
 
   const dispatch = useDispatch()
@@ -33,12 +34,7 @@ const CreateReviewModal = () => {
   // const addInitialReview = (review) => dispatch(addFirstReview(review))
   const closeModal = (value) => dispatch(toggleCreateReviewModal(value))
 
-  const postReview = () => {
-    event.preventDefault()
-    closeModal(false)
-  }
-
-  const takeValues = values => memo(reviewsSet(values), [values])
+  const takeValues = values => reviewsSet(values)
   const lessThanRequiredText = text => text.length < 10
   const testReviews = () => {
     if (lessThanRequiredText(reviews[0])) return true
@@ -80,7 +76,6 @@ const CreateReviewModal = () => {
                   setSubmitting(false)
                   if (response.data.statusCode === 201) {
                     notifySuccess()
-                    closeModal(false)
                     dispatch(toggleCreateReviewModal(false))
                   }
                 })

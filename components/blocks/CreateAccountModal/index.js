@@ -14,6 +14,7 @@ import * as _ from 'lodash'
 import APIClient from 'utils/APIClient'
 import { storeUser, toastConfig } from 'utils'
 import { toast } from 'react-toastify'
+import Router from 'next/router'
 
 const createAnonSchema = Yup.object().shape({
   email: Yup.string()
@@ -81,7 +82,11 @@ const CreateAccountModal = () => {
                     if (!hasForgotPassword) {
                       notifySuccess()
                       storeUser(response.data.data)
-                      dispatch(toggleCreateReviewModal(true))
+                      const timeout = setTimeout(() => {
+                        Router.reload('/')
+                        clearTimeout(timeout)
+                      }, 3000);
+                      // dispatch(toggleCreateReviewModal(true))
                       setLoggedIn(true)
                     } else {
                       notifySuccess(response.data.data.message)
@@ -159,7 +164,7 @@ const CreateAccountModal = () => {
                         </Slide>
                         <Slide right>
                           <RubberBand when={hasAccount}>
-                            <div className="button button--primary" disabled={isSubmitting} onClick={() => { hasAccountSet(!hasAccount) }}>{hasAccount ? 'I don\'t have an account' : ' I have an account'}</div>
+                            <div className="button button--primary" disabled={isSubmitting} onClick={() => { hasAccountSet(!hasAccount); hasForgotPasswordSet(false) }}>{hasAccount ? 'I don\'t have an account' : ' I have an account'}</div>
                           </RubberBand>
                         </Slide>
                       </div>

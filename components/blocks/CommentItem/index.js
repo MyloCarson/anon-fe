@@ -16,13 +16,15 @@ const CommentItem = ({ comment }) => (
 )
 
 CommentItem.propTypes = {
-  _id: PropTypes.string.isRequired,
+  comment: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
   comment: PropTypes.string.isRequired,
   review: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
-  createdAt: PropTypes.string.isRequired,
+  createdAt: PropTypes.string,
   updatedAt: PropTypes.string,
   __v: PropTypes.number
+  })
 }
 
 export default CommentItem

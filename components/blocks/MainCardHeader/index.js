@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { DownChevron } from 'components/vectors'
+import { DownChevron, SignInIcon } from 'components/vectors'
 import PropTypes from 'prop-types'
 import { ReviewButton } from 'components/blocks'
+import { getUser } from 'utils'
 
 const MainCardHeader = () => {
   const [showMenu, showMenuSet] = useState(false)
@@ -33,9 +34,16 @@ const MainCardHeader = () => {
         <p className="text-green-600 ml-5">Newest</p>
         <p className="text-orange-600 ml-5">Trending</p>
       </div>
-      <div className="hidden md:block">
-        <ReviewButton />
+
+      {getUser() ? (
+        <div className="hidden md:flex">
+          <ReviewButton />
+        </div>
+      ) : (
+        <div className="ml-auto hidden md:flex">
+        <SignInIcon width={24} height={24} fill="#fff"/>
       </div>
+      )}
     </div>
   )
 }

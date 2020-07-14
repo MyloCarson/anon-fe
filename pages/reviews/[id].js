@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Card, Comments, OtherReviewItem, CommentForm, Progress, ErrorBoundary } from 'components/blocks'
 import DefaultLayout from 'components/layout/DefaultLayout'
-import { getKey } from 'utils'
+import { getKey, urlify, getUrlFromText, removeUrl } from 'utils'
 import HeadShake from 'react-reveal/HeadShake'
 import Slide from 'react-reveal/Slide'
-import APIClient from '../../utils/APIClient'
+import APIClient from 'utils/APIClient'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import URLTAG from 'blocks/URL'
 
 const Review = ({ review }) => {
   const [otherReviews, otherReviewsSet] = useState([])
@@ -14,7 +15,7 @@ const Review = ({ review }) => {
 
   useEffect(() => {
     const page = {
-      size: '2',
+      size: '10',
       page: '1'
     }
     APIClient.get(`reviews/${page.size}/${page.page}`)
@@ -42,7 +43,8 @@ const Review = ({ review }) => {
                       review && review.review.map((node, index) => (
                         <div key={getKey()}>
                           <Slide top>
-                            <p className="text-white text-base">{node}</p>
+                            <p className="text-white text-base">{removeUrl(node)}</p>
+                            <URLTAG text={node} />
                           </Slide>
                           {
                             (index !== 0 && index !== (review.review.length - 1)) && (
@@ -81,7 +83,7 @@ const Review = ({ review }) => {
                 <Comments reviewId={review._id} />
               </div>
             </div>
-            <div className="col-span-1">
+            <div className="col-span-1 mt-4 md:mt-0">
               <Card>
                 <div className="">
                   <div className="w-full px-3 py-2 border-b-2 border-gray-700 mb-2 flex flex-row justify-between items-center">
@@ -95,7 +97,7 @@ const Review = ({ review }) => {
                     { !loading && otherReviews && otherReviews.length < 1 && <ErrorBoundary message="No Reviews" />}
                     <ul>
                       { !loading && otherReviews && otherReviews.length > 0 && (
-                        otherReviews.map(review => <OtherReviewItem key={getKey()} review={review} />)
+                        otherReviews.filter(otherReview => otherReview._id !== review._ida).map(review => <OtherReviewItem key={getKey()} review={review} />)
                       )}
                     </ul>
                   </div>
