@@ -1,4 +1,4 @@
-import React, { useState, memo } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import { ReviewsTextArea, Modal, Progress } from 'components/blocks'
 import { getKey, getIdForNameInArray, toastConfig } from 'utils'
 import { toggleCreateReviewModal } from '@actions'
@@ -25,7 +25,6 @@ const CreateReviewModal = () => {
   const notifySuccess = () => toast.success('🥳 Review don cast!!!', toastConfig)
   const notifyError = (message) => toast.error(`😟😟, ${message}`, toastConfig)
 
-  console.log('rendered')
   // const nReview = useSelector((state) => state.newReview);
 
   const dispatch = useDispatch()
@@ -34,7 +33,7 @@ const CreateReviewModal = () => {
   // const addInitialReview = (review) => dispatch(addFirstReview(review))
   const closeModal = (value) => dispatch(toggleCreateReviewModal(value))
 
-  const takeValues = values => reviewsSet(values)
+  const takeValues = values => memo(reviewsSet(values), [values])
   const lessThanRequiredText = text => text.length < 10
   const testReviews = () => {
     if (lessThanRequiredText(reviews[0])) return true

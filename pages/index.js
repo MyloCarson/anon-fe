@@ -9,16 +9,22 @@ import { useDispatch, useSelector } from 'react-redux'
 import APIClient from '../utils/APIClient'
 import PropTypes from 'prop-types'
 import socketIOClient from 'socket.io-client'
+import axios from 'axios'
 
-export function Home ({ reviews, sectors, companies }) {
+export function Home () {
   const dispatch = useDispatch()
-  dispatch(addReviews(reviews)) // add pre-fetched reviews
-  dispatch(addSectors(sectors)) // add pre-fetched sectors
-  dispatch(addCompanies(companies)) // add pre-fetched companies
+
+  const storeCompanies = (companies) => dispatch(addCompanies(companies)) // add pre-fetched companies
+  const storeReviews = (reviews) => dispatch(addReviews(reviews)) // add pre-fetched reviews
+  const storeSectors = (sectors) => dispatch(addSectors(sectors)) // add pre-fetched sectors
+  // dispatch(addCompanies(companies)) // add pre-fetched companies
   const toggleModal = (value) => dispatch(toggleTokenRevealModal(value))
   const loggedIn = useSelector(state => state.loggedIn)
-  const [_reviews, reviewsSet] = useState(reviews)
+
+  const [reviews, reviewsSet] = useState([])
+  const [companies, companiesSet] = useState([])
   const [loading, loadingSet] = useState(false)
+  const [loadingCompanies, loadingCompaniesSet] = useState(true)
   const [pageNumber, pageNumberSet] = useState(1)
   const [pageSize, pageSizeSet] = useState(10)
   const [isLastPage, isLastPageSet] = useState(false)
@@ -34,17 +40,53 @@ export function Home ({ reviews, sectors, companies }) {
         loadingSet(false)
         pageNumberSet(metadata.page)
         isLastPageSet(metadata.last)
-        reviewsSet([..._reviews].concat(response.data.data.reviews))
+        reviewsSet([...reviews].concat(response.data.data.reviews))
       })
   }
   useEffect(() => {
     const socket = socketIOClient(process.env.NEXT_PUBLIC_SOCKET_ENDPOINT)
     socket.on('new-review', response => {
-      reviewsSet([response].concat(_reviews))
+      reviewsSet([response].concat(reviews))
     })
 
     // CLEAN UP THE EFFECT
     return () => socket.disconnect()
+  }, [])
+  
+  useEffect(() => {
+    loadingSet(true)
+    const requestOne = APIClient.get('companies/all')
+    const page = {
+      size: '10',
+      page: '1'
+    }
+    const requestTwo =  APIClient.get(`reviews/${page.size}/${page.page}`)
+    const requestThree = APIClient.get('sectors/all')
+
+    axios.all([requestOne, requestTwo, requestThree])
+    .then( axios.spread((...responses) => {
+      loadingSet(false)
+      loadingCompaniesSet(false)
+      const responseOne  = responses[0]
+      const responseTwo = responses[1]
+      const responseThree = responses[2]
+
+      const companies = responseOne.data.data
+      companiesSet(companies)
+      storeCompanies(companies)
+
+      const reviews = responseTwo.data.data.reviews
+      reviewsSet(reviews)
+      storeReviews(reviews)
+
+      const sectors = responseThree.data.data
+      storeSectors(sectors)
+    }))
+    .catch(err => {
+      notifyError('Contact Admin')
+    })
+    return () => {
+    }
   }, [])
 
   return (
@@ -80,8 +122,8 @@ export function Home ({ reviews, sectors, companies }) {
               <Card>
                 <MainCardHeader />
                 <div className="w-full mt-2">
-                  { _reviews && _reviews.length > 0 && <MainReviews reviews={_reviews} />}
-                  { (!reviews || reviews.length < 1) && <ErrorBoundary message="No Reviews yet"/>}
+                  { reviews && reviews.length > 0 && <MainReviews reviews={reviews} />}
+                  {  !loading && reviews.length < 1 && <ErrorBoundary message="No Reviews yet"/>}
                 </div>
               </Card>
               {
@@ -99,8 +141,9 @@ export function Home ({ reviews, sectors, companies }) {
                   </div>
                   <div className="flex flex-row flex-wrap mb-3 px-2">
                     {
-                      companies && companies.slice(0, 6).map(company => <CompanyPill key={getKey()} name={company.name} />)
+                      !loadingCompanies && companies && companies.slice(0, 6).map(company => <CompanyPill key={getKey()} name={company.name} />)
                     }
+                    { loadingCompanies && <Progress />}
                   </div>
 
                 </div>
@@ -114,37 +157,37 @@ export function Home ({ reviews, sectors, companies }) {
 }
 
 Home.propTypes = {
-  sectors: PropTypes.array.isRequired,
-  companies: PropTypes.array.isRequired,
-  reviews: PropTypes.array.isRequired
+  // sectors: PropTypes.array.isRequired,
+  // // companies: PropTypes.array.isRequired,
+  // reviews: PropTypes.array.isRequired
 }
 
 export default function DefaultApp (props) {
   return <App Component={Home} pageProps={props} />
 }
 
-export async function getStaticProps () {
-  // pre-fetch reviews
-  const page = {
-    size: '10',
-    page: '1'
-  }
-  const reviewsResource = await APIClient.get(`reviews/${page.size}/${page.page}`)
-  const reviews = await reviewsResource.data.data.reviews
-  // pre-fetch sector
-  const sectorResource = await APIClient.get('sectors/all')
-  const sectors = sectorResource.data.data
+// export async function getStaticProps () {
+//   // pre-fetch reviews
+//   const page = {
+//     size: '10',
+//     page: '1'
+//   }
+//   // const reviewsResource = await APIClient.get(`reviews/${page.size}/${page.page}`)
+//   // const reviews = await reviewsResource.data.data.reviews
+//   // pre-fetch sector
+//   const sectorResource = await APIClient.get('sectors/all')
+//   const sectors = sectorResource.data.data
 
-  // pre-fetch companies
+//   // pre-fetch companies
 
-  const companyResource = await APIClient.get('companies/all')
-  const companies = companyResource.data.data
+//   // const companyResource = await APIClient.get('companies/all')
+//   // const companies = companyResource.data.data
 
-  return {
-    props: {
-      reviews,
-      sectors,
-      companies
-    }
-  }
-}
+//   return {
+//     props: {
+//       // reviews,
+//       // sectors,
+//       // companies
+//     }
+//   }
+// }
