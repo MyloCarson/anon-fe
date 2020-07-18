@@ -33,7 +33,7 @@ const CreateReviewModal = () => {
   // const addInitialReview = (review) => dispatch(addFirstReview(review))
   const closeModal = (value) => dispatch(toggleCreateReviewModal(value))
 
-  const takeValues = values => memo(reviewsSet(values), [values])
+  const takeValues = values => reviewsSet(values)
   const lessThanRequiredText = text => text.length < 10
   const testReviews = () => {
     if (lessThanRequiredText(reviews[0])) return true
@@ -109,7 +109,7 @@ const CreateReviewModal = () => {
                   <div className="flex flex-col mb-2">
                     <label htmlFor="company" className="text-white mb-2">Select Company</label>
                     <HeadShake when={(_.has(touched, 'company') && _.has(errors, 'company'))}>
-                      <input list="companies" name="company" id="company" className={`w-auto p-2 rounded ${(_.has(touched, 'company') && _.has(errors, 'company')) && 'form--error'}`} value={values.company} onChange={handleChange} />
+                      <input list="companies" name="company" id="company" className={`w-auto p-2 rounded ${(_.has(touched, 'company') && _.has(errors, 'company')) && 'form--error'}`} value={values.company} onChange={handleChange} autoFocus tabIndex="0"/>
                     </HeadShake>
                     <datalist id="companies">
                       { companies && companies.map((company) => <option key={getKey()} value={company.name}/>)}
@@ -135,7 +135,7 @@ const CreateReviewModal = () => {
                   <div className="flex flex-col mt-2">
                     <label htmlFor="sector" className="text-white mb-2">Sector Company Belongs</label>
                     <HeadShake when={(_.has(touched, 'sector') && _.has(errors, 'sector'))}>
-                      <input list="sectors" name="sector" id="sector" className={`w-auto p-2 rounded ${_.has(touched, 'sector') && _.has(errors, 'sector') && 'form--error'}`} value={values.sector} onChange={handleChange} />
+                      <input list="sectors" name="sector" id="sector" className={`w-auto p-2 rounded ${_.has(touched, 'sector') && _.has(errors, 'sector') && 'form--error'}`} value={values.sector} onChange={handleChange} autoFocus tabIndex="0"/>
                     </HeadShake>
                     <datalist id="sectors">
                       {

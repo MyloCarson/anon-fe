@@ -19,6 +19,7 @@ import ReviewButton from './ReviewButton'
 import ErrorBoundary from './ErrorBoundary'
 import Comments from './Comments'
 import MainReviews from './MainReviews'
+import DataList from './DataList'
 
 export {
   Card,
@@ -42,4 +43,5 @@ export {
   ErrorBoundary,
   Comments,
   MainReviews,
+  DataList
 }

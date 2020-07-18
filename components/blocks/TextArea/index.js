@@ -20,9 +20,6 @@ const TextArea = ({ onChange, value, error = false }) => {
         className={`w-auto resize-none p-2 rounded h-20 ${error && 'form--error'}`}
         placeholder="Cast your honest review"
         maxLength="160"
-        autoFocus
-        autoComplete
-        autoCorrect
         onChange={handleChange}
       />
       <span className="text-white text-base mt-px">

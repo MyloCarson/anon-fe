@@ -8,12 +8,13 @@ import PropTypes from 'prop-types'
 const ReviewsTextArea = ({ reviewHasError, takeValues }) => {
   const [reviews, reviewsSet] = useState([''])
   const [errors, errorsSet] = useState([false])
+  const [showMoreButton, setShowMoreButton] = useState(false)
   const addMore = () => {
     // if (reviews.length === 1) {
     //   console.log(reviews)
     //   // addInitialReview(reviews)
     // } else {
-    if (reviews[reviews.length - 1].length === 160) { // if the last review is more than 160
+    if (reviews[reviews.length - 1].length >= 160) { // if the last review is more than 160
       // addReview('')
       reviewsSet([...reviews, ''])
       // console.log(reviews)
@@ -24,6 +25,11 @@ const ReviewsTextArea = ({ reviewHasError, takeValues }) => {
     const _review = reviews
     _review[index] = value
     reviewsSet(_review)
+    if (reviews[reviews.length - 1].length >= 160) { // if the last review is more than 160
+      setShowMoreButton(true)
+    } else {
+      setShowMoreButton(false)
+    }
 
     takeValues(reviews) // send all values
   }
@@ -31,19 +37,20 @@ const ReviewsTextArea = ({ reviewHasError, takeValues }) => {
     <>
       {
         reviews.map((review, index) =>
-          <Slide top key={getKey()}>
+          // <Slide top key={getKey()}>
             <HeadShake when={errors[index] || reviewHasError}>
               <TextArea value={review} onChange={(value) => { handleChange(value, index) }} error={reviewHasError} />
             </HeadShake>
-          </Slide>)
+          // </Slide>
+          )
       }
       {
-        reviews[0].length > 159 && (
-          <Slide left>
+        showMoreButton && (
+          // <Slide left>
             <div className="flex flex-row justify-end mt-4">
               <Button label="More" onClick={addMore} />
             </div>
-          </Slide>
+          // </Slide>
         )
       }
     </>
