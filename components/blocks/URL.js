@@ -8,7 +8,8 @@ const URLTAG = ({ text }) => {
   const [metadata, metadataSet] = useState({})
   const [url, urlSet] = useState(null)
   useEffect(() => {
-    const _url = getUrlFromText(text)[0]
+    // const _url = getUrlFromText(text)[0] ? getUrlFromText(text)[0] : getUrlFromText(text)
+    const _url =  getUrlFromText(text)
     urlSet(_url)
     if (url) {
       const url = 'https://cors-anywhere.herokuapp.com/' + _url

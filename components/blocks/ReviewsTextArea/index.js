@@ -38,7 +38,7 @@ const ReviewsTextArea = ({ reviewHasError, takeValues }) => {
       {
         reviews.map((review, index) =>
           // <Slide top key={getKey()}>
-            <HeadShake when={errors[index] || reviewHasError}>
+            <HeadShake key={getKey()} when={errors[index] || reviewHasError}>
               <TextArea value={review} onChange={(value) => { handleChange(value, index) }} error={reviewHasError} />
             </HeadShake>
           // </Slide>

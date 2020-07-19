@@ -17,7 +17,7 @@ const TextArea = ({ onChange, value, error = false }) => {
         type="text"
         name="answer"
         value={_value}
-        className={`w-auto resize-none p-2 rounded h-20 ${error && 'form--error'}`}
+        className={`w-auto resize-none p-2 rounded h-20 white-space ${error && 'form--error'}`}
         placeholder="Cast your honest review"
         maxLength="160"
         onChange={handleChange}

@@ -10,3 +10,12 @@ export const COMPANIES = 'COMPANIES'
 export const NEW_COMMENT = 'NEW_COMMENT'
 export const LOADING_REVIEWS = 'LOADING_REVIEWS'
 export const LOGGED_IN = 'LOGGED_IN'
+
+
+//statuses
+
+export const IDLE = 'IDLE'
+export const PENDING = 'PENDING'
+export const RESOLVED = 'RESOLVED'
+export const REJECTED = 'REJECTED'
+export const STARTED = 'STARTED'

@@ -8,16 +8,35 @@ import APIClient from 'utils/APIClient'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import URLTAG from 'blocks/URL'
+import {useRouter} from 'next/router'
+import { IDLE, STARTED, RESOLVED, REJECTED } from '@constants'
 
-const Review = ({ review }) => {
+const Review = () => {
+  const {query} = useRouter()
+  const [review, reviewSet] = useState({})
   const [otherReviews, otherReviewsSet] = useState([])
   const [loading, loadingSet] = useState(true)
+  const [fetchReviewStatus, setFetchReviewStatus] = useState(IDLE)
+
+  useEffect(() => {
+    setFetchReviewStatus(STARTED)
+    APIClient.get(`reviews/${query.id}`)
+    .then( response => {
+      reviewSet(response.data.data)
+      setFetchReviewStatus(RESOLVED)
+    })
+    .catch( err => {
+      setFetchReviewStatus(REJECTED)
+    })
+    return () => {    }
+  }, [query.id])
 
   useEffect(() => {
     const page = {
       size: '10',
       page: '1'
     }
+
     APIClient.get(`reviews/${page.size}/${page.page}`)
       .then(response => {
         loadingSet(false)
@@ -39,11 +58,13 @@ const Review = ({ review }) => {
               <div>
                 <Card>
                   <div className="p-4">
-                    {
-                      review && review.review.map((node, index) => (
+                    { fetchReviewStatus === IDLE || fetchReviewStatus === STARTED  && <Progress />}
+                    { fetchReviewStatus === REJECTED && <ErrorBoundary message="Review not found"/>}
+                  {
+                      fetchReviewStatus === RESOLVED && review.review && review.review.map((node, index) => (
                         <div key={getKey()}>
                           <Slide top>
-                            <p className="text-white text-base">{removeUrl(node)}</p>
+                            <p className="text-white text-base white-space">{removeUrl(node)}</p>
                             <URLTAG text={node} />
                           </Slide>
                           {
@@ -59,28 +80,32 @@ const Review = ({ review }) => {
 
                   </div>
                 </Card>
-                <div className="flex flex-row justify-between mt-2">
-                  <div>
-                    <Slide top>
-                      <p className="text-white text-sm font-bold"><span className="text-xs font-normal">by</span> {review.user.name}</p>
-                    </Slide>
-                    <Slide bottom>
-                      <p className="text-white text-xl uppercase">{review.company.name}</p>
-                    </Slide>
-                  </div>
-                  <div>
-                    <Slide bottom>
-                      <span className="block text-white text-sm">{moment(review.createdAt).format('ddd, MMM Do YYYY hh:mm a')}</span>
-                    </Slide>
-                  </div>
-                </div>
+                {
+                  fetchReviewStatus === RESOLVED && (
+                    <div className="flex flex-row justify-between mt-2">
+                      <div>
+                        <Slide top>
+                          <p className="text-white text-sm font-bold"><span className="text-xs font-normal">by</span> {review.user.name}</p>
+                        </Slide>
+                        <Slide bottom>
+                          <p className="text-white text-xl uppercase">{review.company.name}</p>
+                        </Slide>
+                      </div>
+                      <div>
+                        <Slide bottom>
+                          <span className="block text-white text-sm">{moment(review.createdAt).format('ddd, MMM Do YYYY hh:mm a')}</span>
+                        </Slide>
+                      </div>
+                    </div>
+                  )
+                }
               </div>
               <div className="mt-6">
-                <CommentForm reviewId={review._id} />
+                {fetchReviewStatus === RESOLVED && (<CommentForm reviewId={review._id} />)}
               </div>
 
               <div className="mt-6">
-                <Comments reviewId={review._id} />
+              {fetchReviewStatus === RESOLVED && (<Comments reviewId={review._id} />)}
               </div>
             </div>
             <div className="col-span-1 mt-4 md:mt-0">
@@ -112,46 +137,46 @@ const Review = ({ review }) => {
   )
 }
 
-export async function getStaticPaths () {
-  const reviewsResource = await APIClient.get('reviews/all')
-  const reviews = await reviewsResource.data.data
-  const paths = reviews.map((review) => ({
-    params: { id: review._id }
-  }))
-  return {
-    paths: paths,
-    fallback: false
-  }
-}
+// export async function getStaticPaths () {
+//   const reviewsResource = await APIClient.get('reviews/all')
+//   const reviews = await reviewsResource.data.data
+//   const paths = reviews.map((review) => ({
+//     params: { id: review._id }
+//   }))
+//   return {
+//     paths: paths,
+//     fallback: false
+//   }
+// }
 
-// This also gets called at build time
-export async function getStaticProps ({ params }) {
-  // params contains the post `id`.
-  // If the route is like /posts/1, then params.id is 1
-  const reviewResource = await APIClient.get(`reviews/${params.id}`)
-  const review = await reviewResource.data.data
+// // This also gets called at build time
+// export async function getStaticProps ({ params }) {
+//   // params contains the post `id`.
+//   // If the route is like /posts/1, then params.id is 1
+//   const reviewResource = await APIClient.get(`reviews/${params.id}`)
+//   const review = await reviewResource.data.data
 
-  // Pass post data to the page via props
-  return { props: { review } }
-}
+//   // Pass post data to the page via props
+//   return { props: { review } }
+// }
 
 Review.propTypes = {
-  review: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    review: PropTypes.arrayOf(PropTypes.string.isRequired),
-    verifiedByUser: true,
-    verifiedByAdmin: false,
-    company: PropTypes.shape({
-      name: PropTypes.string.isRequired
-    }),
-    user: PropTypes.shape({
-      verified: false,
-      name: PropTypes.string.isRequired,
-      public_id: PropTypes.string.isRequired,
-      __v: PropTypes.number.isRequired
-    }),
-    createdAt: PropTypes.string.isRequired,
-    __v: PropTypes.number.isRequired
-  })
+  // review: PropTypes.shape({
+  //   _id: PropTypes.string.isRequired,
+  //   review: PropTypes.arrayOf(PropTypes.string.isRequired),
+  //   verifiedByUser: true,
+  //   verifiedByAdmin: false,
+  //   company: PropTypes.shape({
+  //     name: PropTypes.string.isRequired
+  //   }),
+  //   user: PropTypes.shape({
+  //     verified: false,
+  //     name: PropTypes.string.isRequired,
+  //     public_id: PropTypes.string.isRequired,
+  //     __v: PropTypes.number.isRequired
+  //   }),
+  //   createdAt: PropTypes.string.isRequired,
+  //   __v: PropTypes.number.isRequired
+  // })
 }
 export default Review

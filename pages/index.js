@@ -21,7 +21,7 @@ export function Home () {
   const toggleModal = (value) => dispatch(toggleTokenRevealModal(value))
   const loggedIn = useSelector(state => state.loggedIn)
 
-  const [reviews, reviewsSet] = useState([])
+  const [reviews, reviewsSet] = useState(useSelector( state => state.reviews))
   const [companies, companiesSet] = useState([])
   const [loading, loadingSet] = useState(false)
   const [loadingCompanies, loadingCompaniesSet] = useState(true)
@@ -46,12 +46,13 @@ export function Home () {
   useEffect(() => {
     const socket = socketIOClient(process.env.NEXT_PUBLIC_SOCKET_ENDPOINT)
     socket.on('new-review', response => {
+      console.log(reviews)
       reviewsSet([response].concat(reviews))
     })
 
     // CLEAN UP THE EFFECT
     return () => socket.disconnect()
-  }, [])
+  }, [reviews])
   
   useEffect(() => {
     loadingSet(true)
