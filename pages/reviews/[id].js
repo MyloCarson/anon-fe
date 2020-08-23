@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Card, Comments, OtherReviewItem, CommentForm, Progress, ErrorBoundary } from 'components/blocks'
+import { Card, Comments, OtherReviewItem, CommentForm, Progress, ErrorBoundary, CompanyPill } from 'components/blocks'
 import DefaultLayout from 'components/layout/DefaultLayout'
 import { getKey, urlify, getUrlFromText, removeUrl } from 'utils'
 import HeadShake from 'react-reveal/HeadShake'
@@ -7,19 +7,19 @@ import Slide from 'react-reveal/Slide'
 import APIClient from 'utils/APIClient'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import URLTAG from 'blocks/URL'
+// import URLTAG from 'blocks/URL'
 import {useRouter} from 'next/router'
 import { IDLE, STARTED, RESOLVED, REJECTED } from '@constants'
 
 const Review = () => {
-  const {query} = useRouter()
-  const [review, reviewSet] = useState({})
-  const [otherReviews, otherReviewsSet] = useState([])
-  const [loading, loadingSet] = useState(true)
-  const [fetchReviewStatus, setFetchReviewStatus] = useState(IDLE)
+  const {query} = useRouter();
+  const [review, reviewSet] = useState({});
+  const [otherReviews, otherReviewsSet] = useState([]);
+  const [loading, loadingSet] = useState(true);
+  const [fetchReviewStatus, setFetchReviewStatus] = useState(IDLE);
 
   useEffect(() => {
-    setFetchReviewStatus(STARTED)
+    setFetchReviewStatus(STARTED);
     APIClient.get(`reviews/${query.id}`)
     .then( response => {
       reviewSet(response.data.data)
@@ -49,6 +49,14 @@ const Review = () => {
         loadingSet(false)
       })
   }, [])
+
+  const getLinks = (review) => {
+    console.log(review.review)
+    console.log(Array.from(review.review).map( node => getUrlFromText(node)).flat())
+    // return []
+    return Array.from(review.review).map( node => getUrlFromText(node)).flat()
+  };
+
   return (
     <DefaultLayout>
       <main className="w-screen pt-5 pb-16 px-4 xl:px-0">
@@ -60,22 +68,40 @@ const Review = () => {
                   <div className="p-4">
                     { fetchReviewStatus === IDLE || fetchReviewStatus === STARTED  && <Progress />}
                     { fetchReviewStatus === REJECTED && <ErrorBoundary message="Review not found"/>}
-                  {
-                      fetchReviewStatus === RESOLVED && review.review && review.review.map((node, index) => (
-                        <div key={getKey()}>
-                          <Slide top>
-                            <p className="text-white text-base white-space">{removeUrl(node)}</p>
-                            <URLTAG text={node} />
-                          </Slide>
-                          {
-                            (index !== 0 && index !== (review.review.length - 1)) && (
-                              <Slide top>
-                                <div className="h-6 w-px bg-green-600"></div>
-                              </Slide>
-                            )
-                          }
+                    {
+                        fetchReviewStatus === RESOLVED && review.review && review.review.map((node, index) => (
+                          <div key={getKey()}>
+                            <Slide top>
+                              <>
+                                <p className="text-white text-base white-space break-words">{removeUrl(node)}</p>
+                              </>
+                            </Slide>
+                            {
+                              (index !== 0 && index !== (review.review.length - 1)) && (
+                                <Slide top>
+                                  <div className="h-6 w-px bg-green-600"></div>
+                                </Slide>
+                              )
+                            }
+                          </div>
+                        ))
+                      }
+
+                    {
+                      fetchReviewStatus === RESOLVED && review.review && (
+                        <div>
+                          <h6 className="text-lg text-white">Links</h6>
+                            <ul>
+                              {
+                                getLinks(review).map( link => (
+                                  <li key={getKey()}>
+                                    <a href={link} className="text-sm text-gray-300 break-words underline">{link}</a>
+                                  </li>
+                                ))
+                              }
+                            </ul>
                         </div>
-                      ))
+                      )
                     }
 
                   </div>
@@ -84,11 +110,9 @@ const Review = () => {
                   fetchReviewStatus === RESOLVED && (
                     <div className="flex flex-row justify-between mt-2">
                       <div>
+                        <CompanyPill name={review.company.name} />
                         <Slide top>
-                          <p className="text-white text-sm font-bold"><span className="text-xs font-normal">by</span> {review.user.name}</p>
-                        </Slide>
-                        <Slide bottom>
-                          <p className="text-white text-xl uppercase">{review.company.name}</p>
+                          <p className="text-white text-sm font-bold mt-2"><span className="text-xs font-normal">by</span> {review.user.name}</p>
                         </Slide>
                       </div>
                       <div>
@@ -122,7 +146,7 @@ const Review = () => {
                     { !loading && otherReviews && otherReviews.length < 1 && <ErrorBoundary message="No Reviews" />}
                     <ul>
                       { !loading && otherReviews && otherReviews.length > 0 && (
-                        otherReviews.filter(otherReview => otherReview._id !== review._ida).map(review => <OtherReviewItem key={getKey()} review={review} />)
+                        otherReviews.filter(otherReview => otherReview._id !== review._id).map(review => <OtherReviewItem key={getKey()} review={review} />)
                       )}
                     </ul>
                   </div>

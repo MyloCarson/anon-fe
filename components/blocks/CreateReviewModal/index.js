@@ -13,6 +13,8 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import * as _ from 'lodash'
 import APIClient from '../../../utils/APIClient'
+import Link from 'next/link'
+
 
 import { toast } from 'react-toastify'
 
@@ -69,6 +71,22 @@ const CreateReviewModal = () => {
                 company: getIdForNameInArray(companies, values.company),
                 review: reviews,
                 company_email: values.company_email
+              }
+
+              if(values.company_email){
+                APIClient.post('reviews/verifyEmail', {email: values.company_email})
+                .then(response => {
+                  console.log(response)
+                  if(response.data.statusCode === 200){
+                    if(!response.data.data.isValid){
+                      return;
+                    }
+                  }
+                })
+                .catch( error => {
+                  console.log(error)
+                  return;
+                })
               }
               APIClient.post('reviews', payload)
                 .then(response => {
@@ -133,7 +151,14 @@ const CreateReviewModal = () => {
 
                 <Slide top>
                   <div className="flex flex-col mt-2">
-                    <label htmlFor="sector" className="text-white mb-2">Sector Company Belongs</label>
+                    <div className="flex flex-row mb-2 justify-between items-center">
+                      <label htmlFor="sector" className="text-white ">Sector Company Belongs</label>
+                      <Link href="/faq">
+                        <a onClick={closeModal} title="Help"><InfoIcon width={16} height={16} fill="#fff" /></a>
+                      </Link>
+                    </div>
+                    
+                    
                     <HeadShake when={(_.has(touched, 'sector') && _.has(errors, 'sector'))}>
                       <input list="sectors" name="sector" id="sector" className={`w-auto p-2 rounded ${_.has(touched, 'sector') && _.has(errors, 'sector') && 'form--error'}`} value={values.sector} onChange={handleChange} autoFocus tabIndex="0"/>
                     </HeadShake>
@@ -176,7 +201,7 @@ const CreateReviewModal = () => {
                       <div className="flex-shrink-0 mt-1">
                         <PrivacyIcon width={16} height={17} fill="#fff" />
                       </div>
-                      <p className="text-sm text-white ml-2">Your email address is confidential and will never be shared. Anon uses your company's email to verify your review.</p>
+                      <p className="text-sm text-white ml-2">Your email address is confidential and will never be shared. SafeSpace uses your company's email to verify your review.</p>
                     </div>
                   </Slide>
                 </div>

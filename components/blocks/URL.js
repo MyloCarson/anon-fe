@@ -19,20 +19,21 @@ const URLTAG = ({ text }) => {
           const html = response
           const doc = domino.createWindow(html).document
           const metadata = getMetadata(doc, url)
+          console.log(metadata)
           metadataSet(metadata)
         })
     }
     return () => {
 
     }
-  }, [url])
+  }, [])
 
   return url && metadata && metadata.description && metadata.image ? (<a href={url} target="_blank" rel="noreferrer">
     <div className="md:w-1/2 mr-auto mt-4">
-      <img src={metadata.image || ''} />
+      {/* <img src={metadata.image || ''} />
       <div className="overflow-hidden" style={{ height: '100px' }}>
         <span className="text-sm text-indigo-500 underline">{metadata.description}</span>
-      </div>
+      </div> */}
     </div>
 
   </a>) : null

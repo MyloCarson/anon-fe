@@ -6,7 +6,7 @@ import Router from 'next/router'
 
 const CompanyPill = ({ name }) => {
   return (
-    <div className="button button--primary m-1" onClick={() => { Router.push('/search?company=' + name) }}>
+    <div className="button button--primary" onClick={() => { Router.push('/search?company=' + name) }}>
       <Pulse forever>
 
         <div className="flex flex-row items-center">

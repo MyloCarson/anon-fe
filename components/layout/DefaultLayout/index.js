@@ -8,7 +8,7 @@ export default function DefaultLayout (props) {
   return (
     <>
       <Head>
-        {/* <title>WeJapa | Your Job Search Ends Here</title>
+        <title>SafeSpace | Anonymous Professional Network - SafeSpace</title>
         <link rel='icon' href='/assets/favicon/favicon.ico' />
         <link rel="apple-touch-icon" sizes="57x57" href="/assets/favicon/apple-icon-57x57.png"/>
         <link rel="apple-touch-icon" sizes="60x60" href="/assets/favicon/apple-icon-60x60.png"/>
@@ -26,7 +26,7 @@ export default function DefaultLayout (props) {
         <link rel="manifest" href="/assets/favicon/manifest.json"/>
         <meta name="msapplication-TileColor" content="#ffffff"/>
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png"/>
-        <meta name="theme-color" content="#ffffff"></meta> */}
+        <meta name="theme-color" content="#ffffff"></meta>
       </Head>
       <Header />
       <div className="" style={{minHeight: '85vh'}}>

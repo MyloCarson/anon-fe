@@ -54,12 +54,12 @@ const CreateAccountModal = () => {
       ? (<Modal onClose={() => { closeModal(false) }}>
         <div className="md:w-1/2 mx-auto">
           <Slide top>
-            <h3 className="text-2xl text-white">{ !hasAccount ? 'Create Anon' : !hasForgotPassword ? 'Take me in' : 'Forgot Password' }</h3>
+            <h3 className="text-2xl text-white">{ !hasAccount ? 'Create SafeSpace' : !hasForgotPassword ? 'Take me in' : 'Forgot Password' }</h3>
           </Slide>
           <Slide bottom>
             <div className="flex flex-row my-4">
               <InfoIcon width={24} height={24} fill="#fff" />
-              <p className="text-sm text-white  ml-4">Anon will <span className="font-bold uppercase">never</span> share your email address to the public. Your email address is used for login purposes only.</p>
+              <p className="text-sm text-white  ml-4">SafeSpace will <span className="font-bold uppercase">never</span> share your email address to the public. Your email address is used for login purposes only.</p>
             </div>
           </Slide>
           <Formik
@@ -159,7 +159,7 @@ const CreateAccountModal = () => {
                       <div className="flex flex-col md:flex-row justify-between  mt-8">
                         <Slide right>
                           <RubberBand when={isSubmitting}>
-                            <button className="button button--primary w-full md:w-auto mb-2 md:b-0" type="submit" disabled={isSubmitting}>{ !hasAccount ? 'Create Anon' : !hasForgotPassword ? 'Take me in!' : 'Send Reset Link'}</button>
+                            <button className="button button--primary w-full md:w-auto mb-2 md:b-0" type="submit" disabled={isSubmitting}>{ !hasAccount ? 'Create SafeSpace' : !hasForgotPassword ? 'Take me in!' : 'Send Reset Link'}</button>
                           </RubberBand>
                         </Slide>
                         <Slide right>

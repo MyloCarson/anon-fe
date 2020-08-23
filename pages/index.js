@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import App from './_app'
-import { Card, MainReviews, MainCardHeader, UserCard, CompanyPill, ReviewButton, ErrorBoundary, Progress, Button } from 'components/blocks'
+import { Card, MainReviews, MainCardHeader, UserCard, CompanyPill, ReviewButton, ErrorBoundary, Progress, Button, ReviewItem } from 'components/blocks'
 import DefaultLayout from 'components/layout/DefaultLayout'
 import { getKey, getUser } from 'utils'
 import { UserIcon, SignInIcon, SignOutIcon } from 'components/vectors'
@@ -46,7 +46,7 @@ export function Home () {
   useEffect(() => {
     const socket = socketIOClient(process.env.NEXT_PUBLIC_SOCKET_ENDPOINT)
     socket.on('new-review', response => {
-      console.log(reviews)
+      // console.log(reviews)
       reviewsSet([response].concat(reviews))
     })
 
@@ -115,7 +115,7 @@ export function Home () {
                   </div>
                 )}
               </div>
-              <div className="flex flex-row flex-wrap mb-3 md:hidden">
+              <div className="flex flex-row flex-wrap mb-3 md:hidden space-x-1 space-y-1">
                 {
                   companies && companies.slice(0, 6).map(company => <CompanyPill key={getKey()} name={company.name} />)
                 }
@@ -123,7 +123,7 @@ export function Home () {
               <Card>
                 <MainCardHeader />
                 <div className="w-full mt-2">
-                  { reviews && reviews.length > 0 && <MainReviews reviews={reviews} />}
+                  { reviews && reviews.length > 0 &&  <MainReviews reviews={reviews} />}
                   {  !loading && reviews.length < 1 && <ErrorBoundary message="No Reviews yet"/>}
                 </div>
               </Card>
@@ -140,7 +140,7 @@ export function Home () {
                   <div className="w-full px-3 py-2 border-b-2 border-gray-700 mb-2 flex flex-row justify-between items-center">
                     <h6 className="text-lg text-white">Popular Companies</h6>
                   </div>
-                  <div className="flex flex-row flex-wrap mb-3 px-2">
+                  <div className="flex flex-row flex-wrap items-center mb-3 px-2 space-x-1 space-y-1">
                     {
                       !loadingCompanies && companies && companies.slice(0, 6).map(company => <CompanyPill key={getKey()} name={company.name} />)
                     }

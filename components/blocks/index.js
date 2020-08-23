@@ -20,6 +20,7 @@ import ErrorBoundary from './ErrorBoundary'
 import Comments from './Comments'
 import MainReviews from './MainReviews'
 import DataList from './DataList'
+import SectorDetail from './SectorDetail'
 
 export {
   Card,
@@ -43,5 +44,6 @@ export {
   ErrorBoundary,
   Comments,
   MainReviews,
-  DataList
+  DataList,
+  SectorDetail
 }

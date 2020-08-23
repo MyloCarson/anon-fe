@@ -56,7 +56,6 @@ const ResetPassword = () => {
                   setSubmitting(false)
                   if (response.data.statusCode === 200) {
                     notifySuccess()
-                    storeUser(response.data.data)
                     Router.push('/')
                   }
                 })

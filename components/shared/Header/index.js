@@ -21,7 +21,7 @@ const Header = () => {
         <div className="main-container">
           <div className="header px-4 md:px-1 xl:px-0  ">
             <Link href="/">
-              <a className="header-title mr-4">ANON</a>
+              <a className="header-title mr-4">SafeSpace</a>
             </Link>
             <nav className="nav">
               <Formik
