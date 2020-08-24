@@ -78,7 +78,7 @@ const CreateAccountModal = () => {
               APIClient.post(link, payload)
                 .then(response => {
                   setSubmitting(false)
-                  if (response.data.statusCode === 201 || response.data.statusCode === 200) {
+                  if (response.data.statusCode === 200) {
                     if (!hasForgotPassword) {
                       notifySuccess()
                       storeUser(response.data.data)
@@ -91,8 +91,14 @@ const CreateAccountModal = () => {
                     } else {
                       notifySuccess(response.data.data.message)
                     }
-                    closeModal(false)
+                    
                   }
+
+                  if(response.data.statusCode === 201){
+                    notifySuccess(response.data.data)
+                  }
+
+                  closeModal(false)
                 })
                 .catch(error => {
                   setSubmitting(false)
