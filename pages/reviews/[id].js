@@ -19,16 +19,18 @@ const Review = () => {
   const [fetchReviewStatus, setFetchReviewStatus] = useState(IDLE);
 
   useEffect(() => {
-    setFetchReviewStatus(STARTED);
-    APIClient.get(`reviews/${query.id}`)
-    .then( response => {
-      reviewSet(response.data.data)
-      setFetchReviewStatus(RESOLVED)
-    })
-    .catch( err => {
-      setFetchReviewStatus(REJECTED)
-    })
-    return () => {    }
+    if(query.id){
+      setFetchReviewStatus(STARTED);
+      APIClient.get(`reviews/${query.id}`)
+      .then( response => {
+        reviewSet(response.data.data)
+        setFetchReviewStatus(RESOLVED)
+      })
+      .catch( err => {
+        setFetchReviewStatus(REJECTED)
+      })
+    }
+    // return () => {    }
   }, [query.id])
 
   useEffect(() => {
@@ -51,10 +53,7 @@ const Review = () => {
   }, [])
 
   const getLinks = (review) => {
-    console.log(review.review)
-    console.log(Array.from(review.review).map( node => getUrlFromText(node)).flat())
-    // return []
-    return Array.from(review.review).map( node => getUrlFromText(node)).flat()
+    return Array.from(review.review).map( node => getUrlFromText(node)).filter( x => {if(x) return x;}).flat();
   };
 
   return (
@@ -88,7 +87,7 @@ const Review = () => {
                       }
 
                     {
-                      fetchReviewStatus === RESOLVED && review.review && (
+                      fetchReviewStatus === RESOLVED && getLinks(review).length > 0 && (
                         <div>
                           <h6 className="text-lg text-white">Links</h6>
                             <ul>

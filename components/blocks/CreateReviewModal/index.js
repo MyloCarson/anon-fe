@@ -76,7 +76,7 @@ const CreateReviewModal = () => {
               if(values.company_email){
                 APIClient.post('reviews/verifyEmail', {email: values.company_email})
                 .then(response => {
-                  console.log(response)
+                  // console.log(response)
                   if(response.data.statusCode === 200){
                     if(!response.data.data.isValid){
                       return;

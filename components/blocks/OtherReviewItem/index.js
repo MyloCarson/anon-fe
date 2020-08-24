@@ -7,7 +7,7 @@ import { removeUrl } from 'utils'
 const OtherReviewItem = ({ review }) => (
   <Fade top cascade>
     <li className="text-white text-sm my-2">
-      <Link href={`/review/${review._id}`}>
+      <Link href={`/reviews/${review._id}`}>
         <a className="text-gray-300 break-words">{removeUrl(review.review[0])}</a>
       </Link>
       <span className="block text-right text-gray-600">by {review.user.name}</span>

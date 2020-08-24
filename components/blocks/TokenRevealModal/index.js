@@ -44,7 +44,7 @@ const TokenRevealModal = () => {
           <Button label= "Logout"  onClick={logout} />
           <div className="flex flex-row mt-24">
             <InfoIcon width={24} height={24} fill="#fff" />
-            <p className="text-sm text-white  ml-4">Keep your token safe, as it allows you reuse this SafeSpace account, together with your secret question and answer.</p>
+            <p className="text-sm text-white  ml-4">Your personal data on SafeSpace is safe and will NEVER be shared to any third party.</p>
           </div>
           
         </div>

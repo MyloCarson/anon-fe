@@ -85,7 +85,7 @@ const CreateAccountModal = () => {
                       const timeout = setTimeout(() => {
                         Router.reload('/')
                         clearTimeout(timeout)
-                      }, 3000);
+                      }, 1500);
                       // dispatch(toggleCreateReviewModal(true))
                       setLoggedIn(true)
                     } else {
