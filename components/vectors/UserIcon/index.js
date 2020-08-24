@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const UserIcon = ({ width = 448, height = 512, fill = "black" }) => (
+const UserIcon = ({ width, height, fill }) => (
   <svg
     width={width}
     height={height}
@@ -15,6 +15,12 @@ const UserIcon = ({ width = 448, height = 512, fill = "black" }) => (
     />
   </svg>
 );
+
+UserIcon.defaultProps = {
+  width: 448,
+  height: 512,
+  fill: 'black'
+}
 
 UserIcon.propTypes = {
   width: PropTypes.number.isRequired,

@@ -9,15 +9,15 @@ import { removeUrl } from 'utils'
 
 const ReviewItem = ({ review }) => {
   const isGreater = num => num < 99
-  const [comments, commentsSet] = useState([].length)
+  const [comments, commentsSet] = useState(0)
   useEffect(() => {
+
     APIClient.get(`comments/review/${review._id}`)
       .then(response => {
         if (response.data.statusCode === 200) commentsSet(response.data.data.length)
       })
-    return () => {
-
-    }
+      .catch(e => {})
+      return () => {}
   }, [review._id])
   return (
     <div className="border-b-2 last:border-b-0 border-gray-700  py-4 px-3">
@@ -42,12 +42,14 @@ const ReviewItem = ({ review }) => {
             </div>
           )}
         </div>
-        <div className="flex flex-col w-full ml-4">
-          <Link href={`/reviews/${review._id}`}>
-            <a className="text-gray-100 mb-1 hover:font-semibold cursor-pointer visited:text-red-600">
-              {review.review && removeUrl(review.review[0])}
-            </a>
-          </Link>
+        <div className="flex flex-col ml-4" style={{width: '90%'}}>
+          <div>
+            <Link href={`/reviews/${review._id}`}>
+              <a className="text-gray-100 mb-1 hover:font-semibold cursor-pointer visited:text-red-600 break-words">
+                {review.review && removeUrl(review.review[0])}
+              </a>
+            </Link>
+          </div>
           <div className="flex flex-row items-center justify-between mt-2">
             <p className="text-gray-600"><span className="text-sm">posted by</span> {review.user.name}</p>
             <span className="text-sm text-teal-300">{moment(review.createdAt).format('ddd, MMM Do YYYY hh:mm a')}</span>
