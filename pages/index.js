@@ -128,7 +128,7 @@ export function Home () {
                 </div>
               </Card>
               {
-                loading ? <Progress /> : !isLastPage && <div className="mx-auto w-1/2 md:w-1/3 mt-4"><Button label="Load More" onClick={fetchMoreReview} /></div>
+                loading ? <Progress /> : reviews.length > 0 && !isLastPage && <div className="mx-auto w-1/2 md:w-1/3 mt-4"><Button label="Load More" onClick={fetchMoreReview} /></div>
               }
             </div>
             <div className="hidden md:flex flex-col col-span-1">
