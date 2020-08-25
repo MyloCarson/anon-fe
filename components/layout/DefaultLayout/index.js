@@ -6,15 +6,10 @@ import { Footer } from 'components/shared'
 
 export default function DefaultLayout (props) {
   const content = process.env.NODE_ENV === 'development' ? null : `
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-75522934-6"></script>
-  <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'UA-75522934-6');
-  </script>
 `
   return (
     <>
@@ -38,10 +33,9 @@ export default function DefaultLayout (props) {
         <meta name="msapplication-TileColor" content="#ffffff"/>
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png"/>
         <meta name="theme-color" content="#ffffff"></meta>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-75522934-6"></script>
         <script dangerouslySetInnerHTML={{
-           __html: `
-           ${content}
-         `,
+           __html: content,
         }} />
       </Head>
       <Header />
