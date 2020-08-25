@@ -1,5 +1,5 @@
 import React from 'react'
-import { SearchIcon } from 'components/vectors/index'
+import { SearchIcon, Logo } from 'components/vectors/index'
 import Link from 'next/link'
 import { ReviewButton } from 'components/blocks'
 import { Formik } from 'formik'
@@ -21,7 +21,9 @@ const Header = () => {
         <div className="main-container">
           <div className="header px-4 md:px-1 xl:px-0  ">
             <Link href="/">
-              <a className="header-title mr-4">SafeSpace</a>
+              <a className="header-title mr-4">
+                <Logo />
+              </a>
             </Link>
             <nav className="nav">
               <Formik
