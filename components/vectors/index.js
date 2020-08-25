@@ -12,7 +12,8 @@ import KeyIcon from './KeyIcon'
 import UserIcon from './UserIcon'
 import SignOutIcon from './SignOutIcon'
 import SignInIcon from './SignInIcon'
+import Logo from './Logo'
 
 export { SearchIcon, DownChevron, CloseIcon, CommentIcon, MoreCommentIcon,
      PrivacyIcon, VerifiedIcon, InfoIcon, JobIcon, KeyIcon,
-      UserIcon, SignInIcon, SignOutIcon }
+      UserIcon, SignInIcon, SignOutIcon, Logo }
