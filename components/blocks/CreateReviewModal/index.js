@@ -186,6 +186,7 @@ const CreateReviewModal = () => {
                   <ReviewsTextArea reviewHasError={reviewHasError} takeValues={takeValues} />
 
                 </div>
+                
                 <div className="flex flex-col mt-2">
                   <Slide top>
                     <label htmlFor="company_email" className="text-white mb-2">Email at company (Optional)</label>

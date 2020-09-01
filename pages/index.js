@@ -28,13 +28,14 @@ export function Home () {
   const [pageNumber, pageNumberSet] = useState(1)
   const [pageSize, pageSizeSet] = useState(10)
   const [isLastPage, isLastPageSet] = useState(false)
+  const [filterUrl, setFilterUrl] = useState('reviews')
   const fetchMoreReview = () => {
     loadingSet(true)
     const page = {
       size: pageSize,
       page: pageNumber + 1
     }
-    APIClient.get(`reviews/${page.size}/${page.page}`)
+    APIClient.get(`${filterUrl}/${page.size}/${page.page}`)
       .then(response => {
         const metadata = response.data.data.metadata
         loadingSet(false)
@@ -51,7 +52,9 @@ export function Home () {
     })
 
     // CLEAN UP THE EFFECT
-    return () => socket.disconnect()
+    return () => {
+      socket.disconnect()
+    }
   }, [reviews])
   
   useEffect(() => {
@@ -90,6 +93,45 @@ export function Home () {
     }
   }, [])
 
+
+  const handleFilterOption = (filterOption) => {
+    switch(filterOption){
+      case 'trending':
+        setFilterUrl('reviews/trending')
+        fetchFilterOptionReviews('reviews/trending')
+        break;
+      case 'newest':
+        setFilterUrl('reviews/newest')
+        fetchFilterOptionReviews('reviews/newest');
+      break;
+      case 'all':
+        setFilterUrl('reviews')
+        fetchFilterOptionReviews('reviews')
+        break;
+
+      default:
+        break;
+    }
+
+  }
+
+  const fetchFilterOptionReviews = (url) => {
+    loadingSet(true)
+    const page = {
+      size: pageSize,
+      page: 1
+    }
+    console.log(url)
+    APIClient.get(`${url}/${page.size}/${page.page}`)
+      .then(response => {
+        const metadata = response.data.data.metadata
+        loadingSet(false)
+        pageNumberSet(metadata.page)
+        isLastPageSet(metadata.last)
+        reviewsSet(response.data.data.reviews)
+      })
+  }
+
   return (
     <DefaultLayout>
       <main className="w-screen pt-5 pb-16 px-4 xl:px-0">
@@ -105,6 +147,7 @@ export function Home () {
                   <div className="button button--primary ml-3">
                     <div onClick={() => { toggleModal(true) }}>
                       <UserIcon width={18} height={18} fill={'#fff'} />
+                      {/* <img src="/assets/images/svg/user.svg" alt="user" /> */}
                     </div>
                   </div>
                 ) : (
@@ -121,7 +164,7 @@ export function Home () {
                 }
               </div>
               <Card>
-                <MainCardHeader />
+                <MainCardHeader handleFilterOption={handleFilterOption} />
                 <div className="w-full mt-2">
                   { reviews && reviews.length > 0 &&  <MainReviews reviews={reviews} />}
                   {  !loading && reviews.length < 1 && <ErrorBoundary message="No Reviews yet"/>}

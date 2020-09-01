@@ -33,7 +33,7 @@ export default function DefaultLayout (props) {
         <meta name="msapplication-TileColor" content="#ffffff"/>
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png"/>
         <meta name="theme-color" content="#ffffff"></meta>
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-75522934-6"></script>
+        <script async defer src="https://www.googletagmanager.com/gtag/js?id=UA-75522934-6"></script>
         <script dangerouslySetInnerHTML={{
            __html: content,
         }} />
