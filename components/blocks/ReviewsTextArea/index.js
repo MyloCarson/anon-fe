@@ -14,7 +14,7 @@ const ReviewsTextArea = ({ reviewHasError, takeValues }) => {
     //   console.log(reviews)
     //   // addInitialReview(reviews)
     // } else {
-    if (reviews[reviews.length - 1].length >= 160) { // if the last review is more than 160
+    if (reviews[reviews.length - 1].length >= 80) { // if the last review is more than 160
       // addReview('')
       reviewsSet([...reviews, ''])
       // console.log(reviews)

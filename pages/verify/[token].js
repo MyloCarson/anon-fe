@@ -30,7 +30,7 @@ export default function Verify() {
 
             })
             .catch(error => {
-                console.log(error.response)
+                // console.log(error.response)
                 setMessage(error.response.data.payload.message)
                 setFetchState(REJECTED)
             })
