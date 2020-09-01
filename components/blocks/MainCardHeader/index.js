@@ -4,17 +4,21 @@ import PropTypes from 'prop-types'
 import { ReviewButton } from 'components/blocks'
 import { getUser } from 'utils'
 
-const MainCardHeader = () => {
+const MainCardHeader = ({handleFilterOption}) => {
   const [showMenu, showMenuSet] = useState(false)
 
   const handleMenuToggle = () => {
     showMenuSet(!showMenu)
   }
 
+  const filter = (value) => {
+    handleFilterOption(value);
+  }
+
   return (
     <div className="w-full px-3 py-5 border-b-2 border-gray-700 mb-2 flex flex-row justify-between items-center">
       <div className=" flex flex-row items-center relative">
-        <div className="group flex flex-row justify-between items-center cursor-pointer relative" onClick={handleMenuToggle}>
+        {/* <div className="group flex flex-row justify-between items-center cursor-pointer relative" onClick={handleMenuToggle}>
           <p className="text-white mr-1 group-focus:text-red-500">Filter</p>
           <DownChevron />
           {
@@ -30,9 +34,10 @@ const MainCardHeader = () => {
               </div>
             )
           }
-        </div>
-        <p className="text-green-600 ml-5">Newest</p>
-        <p className="text-orange-600 ml-5">Trending</p>
+        </div> */}
+        <p className="text-white ml-5 cursor-pointer" onClick={() => {filter('all')}}>All</p>
+        <p className="text-green-600 ml-5 cursor-pointer" onClick={() => {filter('newest')}}>Newest</p>
+        <p className="text-orange-600 ml-5 cursor-pointer" onClick={() => {filter('trending')}}>Trending</p>
       </div>
 
       {getUser() ? (

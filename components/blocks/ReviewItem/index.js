@@ -8,25 +8,16 @@ import APIClient from 'utils/APIClient'
 import { removeUrl } from 'utils'
 
 const ReviewItem = ({ review }) => {
-  const isGreater = num => num < 99
-  const [comments, commentsSet] = useState(0)
-  useEffect(() => {
+  const isTrending = num => num > 5
 
-    APIClient.get(`comments/review/${review._id}`)
-      .then(response => {
-        if (response.data.statusCode === 200) commentsSet(response.data.data.length)
-      })
-      .catch(e => {})
-      return () => {}
-  }, [review._id])
   return (
     <div className="border-b-2 last:border-b-0 border-gray-700  py-4 px-3">
       {/* <Slide top> */}
       <div className="flex flex-row items-center">
         <div className="flex flex-col justify-between items-center h-full">
           {
-            isGreater(comments) ? (
-              <span className="flex-shrink-0 text-gray-600 text-center my-1">{comments}</span>
+            !isTrending(review.numberOfComment) ? (
+              <span className="flex-shrink-0 text-gray-600 text-center my-1">{review.numberOfComment || 0}</span>
             ) : (<div className="my-2">
               <div title="More Comments" className="my-1">
                 <MoreCommentIcon width={14} height={22} fill="#fff"/>
@@ -68,6 +59,7 @@ ReviewItem.propTypes = {
       review: PropTypes.arrayOf(PropTypes.string.isRequired),
       verifiedByUser: PropTypes.bool.isRequired,
       verifiedByAdmin: PropTypes.bool.isRequired,
+      numberOfComment: PropTypes.number,
       company: {
         name: PropTypes.string.isRequired
       },
