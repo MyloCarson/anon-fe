@@ -19,7 +19,7 @@ const URLTAG = ({ text }) => {
           const html = response
           const doc = domino.createWindow(html).document
           const metadata = getMetadata(doc, url)
-          console.log(metadata)
+          // console.log(metadata)
           metadataSet(metadata)
         })
     }

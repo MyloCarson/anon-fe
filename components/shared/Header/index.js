@@ -32,7 +32,7 @@ const Header = () => {
                 }}
                 validationSchema={schema}
                 onSubmit={(values, { setSubmitting, resetForm }) => {
-                  console.log(values)
+                  // console.log(values)
                   Router.push('/search?company=' + values.search)
                 }}>
                 {({
