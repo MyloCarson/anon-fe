@@ -223,7 +223,7 @@ const CreateReviewModal = () => {
                       <div className="flex-shrink-0 mt-1">
                         <InfoIcon width={16} height={16} fill="#fff" />
                       </div>
-                      <p className="text-sm text-white ml-2">Writing a bad review, try not to get too personal so it can't be raced to you.</p>
+                      <p className="text-sm text-white ml-2">Writing a bad review, try not to get too personal so it can't be traced to you.</p>
                     </div>
                   </Slide>
                   <ReviewsTextArea reviewHasError={reviewHasError} takeValues={takeValues} />
@@ -245,14 +245,14 @@ const CreateReviewModal = () => {
                       <div className="flex-shrink-0 mt-1">
                         <PrivacyIcon width={16} height={17} fill="#fff" />
                       </div>
-                      <p className="text-sm text-white ml-2">Your email address is confidential and will never be shared. SafeSpace uses your company's email to verify your review.</p>
+                      <p className="text-sm text-white ml-2">Your email address is confidential. SafeSpace will NOT send any email to this account and it will never be shared . SafeSpace uses your company's email to verify your review.</p>
                     </div>
                   </Slide>
                 </div>
                 { isSubmitting ? (<Progress />)
                   : (<Slide right>
                     <div className="flex flex-row justify-between items-center mt-4">
-                      <button className="button button--primary" disabled={isSubmitting} type="submit">Cast it</button>
+                      <button className="button button--primary bg-teal-600" disabled={isSubmitting} type="submit">Cast it</button>
                     </div>
                   </Slide>)}
               </form>

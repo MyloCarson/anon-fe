@@ -165,12 +165,12 @@ const CreateAccountModal = () => {
                       <div className="flex flex-col md:flex-row justify-between  mt-8">
                         <Slide right>
                           <RubberBand when={isSubmitting}>
-                            <button className="button button--primary w-full md:w-auto mb-2 md:b-0" type="submit" disabled={isSubmitting}>{ !hasAccount ? 'Create SafeSpace' : !hasForgotPassword ? 'Take me in!' : 'Send Reset Link'}</button>
+                            <button className="button button--primary w-full md:w-auto mb-2 md:b-0 bg-teal-600" type="submit" disabled={isSubmitting}>{ !hasAccount ? 'Create SafeSpace' : !hasForgotPassword ? 'Take me in!' : 'Send Reset Link'}</button>
                           </RubberBand>
                         </Slide>
                         <Slide right>
                           <RubberBand when={hasAccount}>
-                            <div className="button button--primary" disabled={isSubmitting} onClick={() => { hasAccountSet(!hasAccount); hasForgotPasswordSet(false) }}>{hasAccount ? 'I don\'t have an account' : ' I have an account'}</div>
+                            <div className="button button--primary " disabled={isSubmitting} onClick={() => { hasAccountSet(!hasAccount); hasForgotPasswordSet(false) }}>{hasAccount ? 'I don\'t have an account' : ' I have an account'}</div>
                           </RubberBand>
                         </Slide>
                       </div>
