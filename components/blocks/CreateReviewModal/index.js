@@ -1,7 +1,7 @@
-import React, { useState, useEffect, memo } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { ReviewsTextArea, Modal, Progress } from 'components/blocks'
 import { getKey, getIdForNameInArray, toastConfig } from 'utils'
-import { toggleCreateReviewModal } from '@actions'
+import { toggleCreateReviewModal, addCompanies } from '@actions'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { PrivacyIcon, InfoIcon } from 'components/vectors'
@@ -34,6 +34,7 @@ const CreateReviewModal = () => {
   // const addReview = (review) => dispatch(addNewReview(review))
   // const addInitialReview = (review) => dispatch(addFirstReview(review))
   const closeModal = (value) => dispatch(toggleCreateReviewModal(value))
+  const storeCompanies = (companies) => dispatch(addCompanies(companies))
 
   const takeValues = values => reviewsSet(values)
   const lessThanRequiredText = text => text.length < 10
@@ -50,6 +51,43 @@ const CreateReviewModal = () => {
     company_email: Yup.string()
       .email('Bad email address')
   })
+
+  const sectorInputRef = useRef(null);
+
+  const companySelector = (companyName) => {
+    return function (company){
+      return company.name === companyName
+    }
+  }
+  const getCompanyIndex = (companies, selector) => {
+    return companies.findIndex(selector);
+  }
+
+  const addExistingCompanySector  = (companies, values) => {
+    const companyName = values.company;
+    if(companyName){
+      const companyIndex = getCompanyIndex(companies, companySelector(companyName))
+      if(companyIndex > -1){
+        const sectorName = companies[companyIndex].sector.name;
+        values.sector = sectorName
+        sectorInputRef.current.value = sectorName
+        
+      }
+    }
+
+  }
+
+  const fetchCompanies = () => {
+    APIClient.get('companies/all')
+    .then(response => {
+      if(response.data && response.data.data){
+        const companies = response.data.data
+        storeCompanies(companies)
+        notifySuccess()
+        dispatch(toggleCreateReviewModal(false))
+      }
+    })
+  }
 
   return (
     showCreateReviewModal
@@ -92,8 +130,12 @@ const CreateReviewModal = () => {
                 .then(response => {
                   setSubmitting(false)
                   if (response.data.statusCode === 201) {
-                    notifySuccess()
-                    dispatch(toggleCreateReviewModal(false))
+                    if(getCompanyIndex(companies, companySelector(values.company)) > -1){
+                      fetchCompanies()
+                    } else {
+                      notifySuccess()
+                      dispatch(toggleCreateReviewModal(false))
+                    }
                   }
                 })
                 .catch(error => {
@@ -127,7 +169,8 @@ const CreateReviewModal = () => {
                   <div className="flex flex-col mb-2">
                     <label htmlFor="company" className="text-white mb-2">Select Company</label>
                     <HeadShake when={(_.has(touched, 'company') && _.has(errors, 'company'))}>
-                      <input list="companies" name="company" id="company" className={`w-auto p-2 rounded ${(_.has(touched, 'company') && _.has(errors, 'company')) && 'form--error'}`} value={values.company} onChange={handleChange} autoFocus tabIndex="0"/>
+                      <input list="companies" name="company" id="company" className={`w-auto p-2 rounded ${(_.has(touched, 'company') && _.has(errors, 'company')) && 'form--error'}`} 
+                      value={values.company} onChange={handleChange} onBlur={() => {addExistingCompanySector(companies, values)}} autoFocus tabIndex="0"/>
                     </HeadShake>
                     <datalist id="companies">
                       { companies && companies.map((company) => <option key={getKey()} value={company.name}/>)}
@@ -160,7 +203,7 @@ const CreateReviewModal = () => {
                     
                     
                     <HeadShake when={(_.has(touched, 'sector') && _.has(errors, 'sector'))}>
-                      <input list="sectors" name="sector" id="sector" className={`w-auto p-2 rounded ${_.has(touched, 'sector') && _.has(errors, 'sector') && 'form--error'}`} value={values.sector} onChange={handleChange} autoFocus tabIndex="0"/>
+                      <input ref={ el => {sectorInputRef.current = el}} list="sectors" name="sector" id="sector" className={`w-auto p-2 rounded ${_.has(touched, 'sector') && _.has(errors, 'sector') && 'form--error'}`} value={values.sector} onChange={handleChange} autoFocus tabIndex="0"/>
                     </HeadShake>
                     <datalist id="sectors">
                       {

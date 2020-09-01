@@ -25,7 +25,7 @@ const ReviewsTextArea = ({ reviewHasError, takeValues }) => {
     const _review = reviews
     _review[index] = value
     reviewsSet(_review)
-    if (reviews[reviews.length - 1].length >= 160) { // if the last review is more than 160
+    if (reviews[reviews.length - 1].length >= 80) { // if the last review is more than 80
       setShowMoreButton(true)
     } else {
       setShowMoreButton(false)
