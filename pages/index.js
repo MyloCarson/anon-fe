@@ -3,7 +3,7 @@ import App from './_app'
 import { Card, MainReviews, MainCardHeader, UserCard, CompanyPill, ReviewButton, ErrorBoundary, Progress, Button, ReviewItem } from 'components/blocks'
 import DefaultLayout from 'components/layout/DefaultLayout'
 import { getKey, getUser } from 'utils'
-import { UserIcon, SignInIcon, SignOutIcon } from 'components/vectors'
+import { UserIcon, SignOutIcon } from 'components/vectors'
 import { toggleTokenRevealModal, addSectors, addCompanies, addReviews } from '@actions'
 import { useDispatch, useSelector } from 'react-redux'
 import APIClient from '../utils/APIClient'
@@ -121,7 +121,6 @@ export function Home () {
       size: pageSize,
       page: 1
     }
-    console.log(url)
     APIClient.get(`${url}/${page.size}/${page.page}`)
       .then(response => {
         const metadata = response.data.data.metadata
@@ -153,7 +152,7 @@ export function Home () {
                 ) : (
                   <div className="button button--primary  ml-4">
                       <div>
-                        <SignInIcon width={24} height={24} fill="#fff"/>
+                        <SignOutIcon width={24} height={24} fill="#fff"/>
                       </div>
                   </div>
                 )}

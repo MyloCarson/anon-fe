@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { DownChevron, SignInIcon } from 'components/vectors'
+import { SignOutIcon  } from 'components/vectors'
 import PropTypes from 'prop-types'
 import { ReviewButton } from 'components/blocks'
 import { getUser } from 'utils'
@@ -46,7 +46,8 @@ const MainCardHeader = ({handleFilterOption}) => {
         </div>
       ) : (
         <div className="ml-auto hidden md:flex">
-        <SignInIcon width={24} height={24} fill="#fff"/>
+          <SignOutIcon width={24} height={24} fill="#fff" />
+          {/* <SignInIcon width={24} height={24} fill="#fff"/> */}
       </div>
       )}
     </div>
