@@ -63,48 +63,52 @@ const Review = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 md:gap-4">
             <div className="col-span-2">
               <div>
-                <Card>
-                  <div className="p-4">
-                    { fetchReviewStatus === IDLE || fetchReviewStatus === STARTED  && <Progress />}
-                    { fetchReviewStatus === REJECTED && <ErrorBoundary message="Review not found"/>}
-                    {
-                        fetchReviewStatus === RESOLVED && review.review && review.review.map((node, index) => (
-                          <div key={getKey()}>
-                            <Slide top>
-                              <>
-                                <p className="text-white text-base white-space break-words">{removeUrl(node)}</p>
-                              </>
-                            </Slide>
-                            {
-                              (index !== 0 && index !== (review.review.length - 1)) && (
+                { fetchReviewStatus === IDLE || fetchReviewStatus === STARTED  && <Progress />}
+                { fetchReviewStatus === REJECTED && <ErrorBoundary message="Review not found"/>}
+                {
+                  fetchReviewStatus === RESOLVED && (
+                    <Card>
+                      <div className="p-4">
+                        {
+                            review.review && review.review.map((node, index) => (
+                              <div key={getKey()}>
                                 <Slide top>
-                                  <div className="h-6 w-px bg-green-600"></div>
+                                  <>
+                                    <p className="text-white text-base white-space break-words">{removeUrl(node)}</p>
+                                  </>
                                 </Slide>
-                              )
-                            }
-                          </div>
-                        ))
-                      }
+                                {
+                                  (index !== 0 && index !== (review.review.length - 1)) && (
+                                    <Slide top>
+                                      <div className="h-6 w-px bg-green-600"></div>
+                                    </Slide>
+                                  )
+                                }
+                              </div>
+                            ))
+                          }
 
-                    {
-                      fetchReviewStatus === RESOLVED && getLinks(review).length > 0 && (
-                        <div>
-                          <h6 className="text-lg text-white">Links</h6>
-                            <ul>
-                              {
-                                getLinks(review).map( link => (
-                                  <li key={getKey()}>
-                                    <a href={link} className="text-sm text-gray-300 break-words underline">{link}</a>
-                                  </li>
-                                ))
-                              }
-                            </ul>
-                        </div>
-                      )
-                    }
+                        {
+                          getLinks(review).length > 0 && (
+                            <div>
+                              <h6 className="text-lg text-white">Links</h6>
+                                <ul>
+                                  {
+                                    getLinks(review).map( link => (
+                                      <li key={getKey()}>
+                                        <a href={link} className="text-sm text-gray-300 break-words underline">{link}</a>
+                                      </li>
+                                    ))
+                                  }
+                                </ul>
+                            </div>
+                          )
+                        }
 
-                  </div>
-                </Card>
+                      </div>
+                    </Card>
+                  )
+                }
                 {
                   fetchReviewStatus === RESOLVED && (
                     <div className="flex flex-row justify-between mt-2">
@@ -132,26 +136,32 @@ const Review = () => {
               </div>
             </div>
             <div className="col-span-1 mt-4 md:mt-0">
-              <Card>
-                <div className="">
-                  <div className="w-full px-3 py-2 border-b-2 border-gray-700 mb-2 flex flex-row justify-between items-center">
-                    <HeadShake>
-                      <h6 className="text-lg text-white">Other Reviews</h6>
-                    </HeadShake>
-                  </div>
-                  <div className="px-3 py-3">
-                    { loading && <Progress />}
-                    { !loading && !otherReviews && <ErrorBoundary message="Problem establishing connection" />}
-                    { !loading && otherReviews && otherReviews.length < 1 && <ErrorBoundary message="No Reviews" />}
-                    <ul>
-                      { !loading && otherReviews && otherReviews.length > 0 && (
-                        otherReviews.filter(otherReview => otherReview._id !== review._id).map(review => <OtherReviewItem key={getKey()} review={review} />)
-                      )}
-                    </ul>
-                  </div>
+            { loading && <Progress />}
+            
+              {
+                !loading && (
+                    <Card>
+                      <div className="">
+                        <div className="w-full px-3 py-2 border-b-2 border-gray-700 mb-2 flex flex-row justify-between items-center">
+                          <HeadShake>
+                            <h6 className="text-lg text-white">Other Reviews</h6>
+                          </HeadShake>
+                        </div>
+                        <div className="px-3 py-3">
+                          <ul>
+                            { otherReviews && otherReviews.length > 0 && (
+                              otherReviews.filter(otherReview => otherReview._id !== review._id).map(review => <OtherReviewItem key={getKey()} review={review} />)
+                            )}
+                          </ul>
+                          { !otherReviews && <ErrorBoundary message="Problem establishing connection" />}
+                          { otherReviews && otherReviews.length < 1 && <ErrorBoundary message="No Reviews" />}
 
-                </div>
-              </Card>
+                        </div>
+
+                      </div>
+                    </Card>
+                )
+              }
             </div>
           </div>
         </div>

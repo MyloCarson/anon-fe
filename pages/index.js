@@ -23,7 +23,7 @@ export function Home () {
 
   const [reviews, reviewsSet] = useState(useSelector( state => state.reviews))
   const [companies, companiesSet] = useState([])
-  const [loading, loadingSet] = useState(false)
+  const [loading, loadingSet] = useState(true)
   const [loadingCompanies, loadingCompaniesSet] = useState(true)
   const [pageNumber, pageNumberSet] = useState(1)
   const [pageSize, pageSizeSet] = useState(10)
@@ -93,7 +93,6 @@ export function Home () {
     }
   }, [])
 
-
   const handleFilterOption = (filterOption) => {
     switch(filterOption){
       case 'trending':
@@ -162,13 +161,16 @@ export function Home () {
                   companies && companies.slice(0, 6).map(company => <CompanyPill key={getKey()} name={company.name} />)
                 }
               </div>
-              <Card>
-                <MainCardHeader handleFilterOption={handleFilterOption} />
-                <div className="w-full mt-2">
-                  { reviews && reviews.length > 0 &&  <MainReviews reviews={reviews} />}
-                  {  !loading && reviews.length < 1 && <ErrorBoundary message="No Reviews yet"/>}
-                </div>
-              </Card>
+              { reviews && reviews.length > 0 && (
+                <Card>
+                  <MainCardHeader handleFilterOption={handleFilterOption} />
+                  <div className="w-full mt-2">
+                    <MainReviews reviews={reviews} />
+                  </div>
+                </Card>
+              ) }
+              
+              {  !loading && reviews.length < 1 && <ErrorBoundary message="No Reviews yet"/>}
               {
                 loading ? <Progress /> : reviews.length > 0 && !isLastPage && <div className="mx-auto w-1/2 md:w-1/3 mt-4"><Button label="Load More" onClick={fetchMoreReview} /></div>
               }
@@ -177,20 +179,26 @@ export function Home () {
               <div>
                 { (getUser() || loggedIn) && <UserCard/>}
               </div>
-              <Card>
-                <div className="">
-                  <div className="w-full px-3 py-2 border-b-2 border-gray-700 mb-2 flex flex-row justify-between items-center">
-                    <h6 className="text-lg text-white">Popular Companies</h6>
-                  </div>
-                  <div className="flex flex-row flex-wrap items-center mb-3 px-2 space-x-1 space-y-1">
-                    {
-                      !loadingCompanies && companies && companies.slice(0, 6).map(company => <CompanyPill key={getKey()} name={company.name} />)
-                    }
-                    { loadingCompanies && <Progress />}
-                  </div>
+              
+              {
+                !loadingCompanies && companies && (
+                  <Card>
+                    <div className="">
+                      <div className="w-full px-3 py-2 border-b-2 border-gray-700 mb-2 flex flex-row justify-between items-center">
+                        <h6 className="text-lg text-white">Popular Companies</h6>
+                      </div>
+                      <div className="flex flex-row flex-wrap items-center mb-3 px-2 space-x-1 space-y-1">
+                        {
+                          companies.slice(0, 6).map(company => <CompanyPill key={getKey()} name={company.name} />)
+                        }
+                      </div>
 
-                </div>
-              </Card>
+                    </div>
+                  </Card>
+                )
+              }
+              
+              { loadingCompanies && <Progress />}
             </div>
           </div>
         </div>
